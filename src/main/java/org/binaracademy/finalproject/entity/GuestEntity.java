@@ -1,5 +1,6 @@
 package org.binaracademy.finalproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,14 +41,20 @@ public class GuestEntity implements Serializable {
     private LocalDate endPassport;
     @Column(name = "google_id")
     private String googleId;
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "contact_id")
+    private Long contactId;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "contact_id", nullable = false)
+    @JoinColumn(name = "contact_id", insertable = false, updatable = false)
     private ContactGuestEntity contact;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "create_at")
     private LocalDateTime createAt;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 

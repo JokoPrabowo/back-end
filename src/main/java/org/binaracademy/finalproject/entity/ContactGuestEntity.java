@@ -1,5 +1,6 @@
 package org.binaracademy.finalproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,8 +31,10 @@ public class ContactGuestEntity {
     private String noTelp;
     @Column(name = "email", nullable = false)
     private String email;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "create_at")
     private LocalDateTime createAt;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
