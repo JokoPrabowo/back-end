@@ -51,10 +51,8 @@ public class GuestEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "contact_id", insertable = false, updatable = false)
     private ContactGuestEntity contact;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "create_at")
     private LocalDateTime createAt;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 

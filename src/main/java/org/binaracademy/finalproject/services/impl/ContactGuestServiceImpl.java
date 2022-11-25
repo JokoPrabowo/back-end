@@ -20,10 +20,7 @@ public class ContactGuestServiceImpl implements ContactGuestService {
         try{
             log.info("Contact Guest has been created");
             ContactGuestEntity sample = data;
-            LocalDateTime created = LocalDateTime.now();
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            String formatted = created.format(format);
-            sample.setCreateAt(LocalDateTime.parse(formatted, format));
+            sample.setCreateAt(LocalDateTime.now());
             return contactGuestRepo.save(sample);
         }catch (Exception e){
             log.error("Error found {}", e);
