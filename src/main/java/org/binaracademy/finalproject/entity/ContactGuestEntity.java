@@ -31,10 +31,8 @@ public class ContactGuestEntity {
     private String noTelp;
     @Column(name = "email", nullable = false)
     private String email;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "create_at")
     private LocalDateTime createAt;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
