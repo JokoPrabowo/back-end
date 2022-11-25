@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -42,6 +43,20 @@ public class CountryServiceImpl implements CountryService {
             log.error(ERROR_FOUND, e.getMessage());
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public List<CountryEntity> createAll(List<CountryEntity> countryList) {
+        return countryRepo.saveAll(countryList);
+    }
+
+    @Override
+    public CountryEntity getOneCountry(Long id) {
+        Optional<CountryEntity> country = countryRepo.findById(id);
+        if (country.isPresent()) {
+            return country.get();
+        }
+        return null;
     }
 
 }
