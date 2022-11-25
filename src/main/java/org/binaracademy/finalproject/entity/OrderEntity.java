@@ -41,6 +41,6 @@ public class OrderEntity implements Serializable {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
     @OneToMany(orphanRemoval = true, mappedBy = "order", cascade = CascadeType.ALL)
-    private List<TicketEntity> orderDetail = new ArrayList<>();
+    private List<TicketEntity> ticket = new ArrayList<>();
 
 }
