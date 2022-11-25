@@ -1,0 +1,146 @@
+[
+  {
+    "id" : 1,
+    "name" : "Indonesia",
+    "city" : [
+      {
+        "name" : "Jakarta"
+      },
+      {
+        "name" : "Bali (Denpasar)"
+      }
+    ]
+  },
+  {
+    "id" : 2,
+    "name" : "Australia",
+    "city" : [
+      {
+        "name": "Sydne"
+      },
+      {
+        "name" : "Melbourne"
+      }
+    ]
+  },
+  {
+    "id" : 3,
+    "name" : "Brunei Darussalam",
+    "city" : [
+      {
+        "name": "Bandar Seri Begawan (Brunei)"
+      },
+      {
+        "name" : "Melbourne"
+      }
+    ]
+  },
+  {
+    "id" : 4,
+    "name" : "China",
+    "city" : [
+      {
+        "name": "Beijing"
+      },
+      {
+        "name" : "Guangzhou (Canton)"
+      },
+      {
+        "name" : "Shanghai"
+      },
+      {
+        "name" : "Shenzhen"
+      },
+      {
+        "name" : "Xiamen"
+      }
+    ]
+  },
+  {
+    "id" : 5,
+    "name" : "Japan",
+    "city" : [
+      {
+        "name": "Fukuoka"
+      },
+      {
+        "name" : "Nagoya"
+      },
+      {
+        "name" : "Osaka (Kansai)"
+      }
+    ]
+  },
+  {
+    "id" : 6,
+    "name" : "Malaysia",
+    "city" : [
+      {
+        "name": "Kuala Lumpur"
+      }
+    ]
+  },
+  {
+    "id" : 7,
+    "name" : "Philippines",
+    "city" : [
+      {
+        "name": "Bacolod"
+      },
+      {
+        "name" : "Bohol"
+      },
+      {
+        "name" : "Osaka (Kansai)"
+      }
+    ]
+  },
+  {
+    "id" : 8,
+    "name" : "Singapore",
+    "city" : [
+      {
+        "name": "Singapore"
+      }
+    ]
+  },
+  {
+    "id" : 9,
+    "name" : "South Korea",
+    "city" : [
+      {
+        "name": "Seoul (Incheon)"
+      }
+    ]
+  },
+  {
+    "id" : 10,
+    "name" : "Thailand",
+    "city" : [
+      {
+        "name": "Bangkok"
+      }
+    ]
+  },
+  {
+    "id" : 11,
+    "name" : "Vietnam",
+    "city" : [
+      {
+        "name": "Hanoi"
+      },
+      {
+        "name" : "Ho Chi Minh"
+      }
+    ]
+  },
+  {
+    "id" : 12,
+    "name" : "United Arab Emirates",
+    "city" : [
+      {
+        "name": "Dubai"
+      }
+    ]
+  }
+]

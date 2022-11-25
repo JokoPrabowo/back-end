@@ -29,8 +29,10 @@ public class CityEntity implements Serializable {
     private LocalDateTime createAt;
     @Column(name = "update_at")
     private LocalDateTime updateAt;
+    @Column(name = "country_id")
+    private Long countryId;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "country_id", nullable = false)
+    @JoinColumn(name = "country_id", insertable = false, updatable = false)
     private CountryEntity country;
 
 }
