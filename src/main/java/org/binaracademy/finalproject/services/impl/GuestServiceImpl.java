@@ -20,10 +20,7 @@ public class GuestServiceImpl implements GuestService {
         try{
             log.info("Guest has been created");
             GuestEntity sample = data;
-            LocalDateTime created = LocalDateTime.now();
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            String formatted = created.format(format);
-            sample.setCreateAt(LocalDateTime.parse(formatted, format));
+            sample.setCreateAt(LocalDateTime.now());
             return guestRepo.save(sample);
         }catch (Exception e){
             log.error("Error found {}", e);
