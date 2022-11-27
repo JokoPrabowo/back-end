@@ -37,6 +37,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public UserEntity getUserByEmail(String email) {
+        UserEntity existUser = userRepo.findUserByEmail(email);
+
+        if(existUser == null) {
+            throw new IllegalStateException("User not found ");
+        }
+
+        try{
+            return existUser;
+        }catch (Exception e){
+            log.error("Error found {}", e);
+            return null;
+        }
+    }
+
     public void processOAuthPostLogin(String email, String nama) {
         UserEntity existUser = userRepo.findUserByEmail(email);
 
