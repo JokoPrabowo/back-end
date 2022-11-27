@@ -12,12 +12,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class UserRegisterRequest {
 
-    private String googleId;
-    @NotNull(message = "user id shouldn't be null")
-    private Long userId;
-
-    @Email(message = "email address is invalid")
+    @NotNull(message = "email shouldn't be null")
     private String email;
+
+    @NotNull(message = "username shouldn't be null")
+    private String username;
 
     @Email(message = "password address is invalid")
     private String password;
