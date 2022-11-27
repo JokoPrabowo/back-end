@@ -10,13 +10,9 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegisterRequest {
-
+public class UserLoginRequest {
     @NotNull(message = "email shouldn't be null")
     private String email;
-
-    @NotNull(message = "username shouldn't be null")
-    private String username;
 
     @Email(message = "password address is invalid")
     private String password;
