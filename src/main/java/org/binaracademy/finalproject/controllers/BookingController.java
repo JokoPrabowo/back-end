@@ -1,33 +1,29 @@
 package org.binaracademy.finalproject.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.binaracademy.finalproject.dto.GuestRequest;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.ContactGuestEntity;
 import org.binaracademy.finalproject.entity.GuestEntity;
-import org.binaracademy.finalproject.services.impl.ContactGuestServiceImpl;
-import org.binaracademy.finalproject.services.impl.GuestServiceImpl;
+import org.binaracademy.finalproject.services.ContactGuestService;
+import org.binaracademy.finalproject.services.GuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/booking")
 public class BookingController {
     @Autowired
-    private GuestServiceImpl guestService;
+    private GuestService guestService;
     @Autowired
-    private ContactGuestServiceImpl contactGuestService;
+    private ContactGuestService contactGuestService;
 
     @PostMapping("/guest")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody GuestRequest data, Errors errors){
