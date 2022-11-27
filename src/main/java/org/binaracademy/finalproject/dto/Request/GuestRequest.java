@@ -1,4 +1,4 @@
-package org.binaracademy.finalproject.dto;
+package org.binaracademy.finalproject.dto.Request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

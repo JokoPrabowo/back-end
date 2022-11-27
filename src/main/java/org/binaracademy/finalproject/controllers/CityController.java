@@ -1,7 +1,7 @@
 package org.binaracademy.finalproject.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.binaracademy.finalproject.dto.CityResponse;
+import org.binaracademy.finalproject.dto.Response.CityResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.services.CityService;
 import org.springframework.http.ResponseEntity;
