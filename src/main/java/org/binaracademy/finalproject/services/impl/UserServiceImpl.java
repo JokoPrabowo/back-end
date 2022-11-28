@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
             log.info("User has been created");
             UserEntity sample = data;
             sample.setCreateAt(LocalDateTime.now());
+            sample.setUpdateAt(LocalDateTime.now());
             return userRepo.save(sample);
         }catch (Exception e){
             log.error("Error found {}", e);
@@ -60,6 +61,9 @@ public class UserServiceImpl implements UserService {
             UserEntity newUser = new UserEntity();
             newUser.setUsername(nama);
             newUser.setEmail(email);
+            newUser.setPassword("GOOGLE");
+            newUser.setCreateAt(LocalDateTime.now());
+            newUser.setUpdateAt(LocalDateTime.now());
             userRepo.save(newUser);
         }
     }

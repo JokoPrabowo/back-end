@@ -19,7 +19,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers( "/login", "/oauth/**").permitAll()
+                .antMatchers( "/google", "/oauth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll()
@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                 .successHandler((request, response, authentication) -> {
                     CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
                     userService.processOAuthPostLogin(oauthUser.getEmail(), oauthUser.getName());
-                    response.sendRedirect("/api/v1/user");
+                    response.sendRedirect("/api/test");
                 })
                 .and()
                 .logout().permitAll();

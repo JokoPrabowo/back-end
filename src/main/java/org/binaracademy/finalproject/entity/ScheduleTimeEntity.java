@@ -24,6 +24,8 @@ public class ScheduleTimeEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "schedule_time_id")
     private Long id;
+    @Column(name = "day", nullable = false)
+    private String day;
     @Column(name = "depature_time", nullable = false)
     private LocalTime depatureTime;
     @Column(name = "arrival_time", nullable = false)

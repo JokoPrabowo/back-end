@@ -17,6 +17,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/register/google")
+    @GetMapping("/test")
+    public String test(){
+        return "OK";
+    }
+
+    @PostMapping("/register")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody UserRegisterRequest data, Errors errors){
         try{
             ResponseData<Object> res = new ResponseData();
@@ -40,7 +46,7 @@ public class UserController {
             }
 
             UserEntity user = userService.create(new UserEntity(null, data.getUsername(),
-                    data.getEmail(), data.getPassword(),null, null, null));
+                    data.getEmail(), data.getPassword(),null, LocalDateTime.now(), LocalDateTime.now()));
 
             res.setSuccess(true);
             res.setStatusCode(HttpStatus.CREATED.value());
