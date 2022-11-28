@@ -7,9 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.binaracademy.finalproject.data.CountryData;
 import org.binaracademy.finalproject.data.ScheduleTimeData;
 import org.binaracademy.finalproject.data.TimeData;
+import org.binaracademy.finalproject.entity.CategoryClassEntity;
 import org.binaracademy.finalproject.entity.CityEntity;
 import org.binaracademy.finalproject.entity.CountryEntity;
 import org.binaracademy.finalproject.entity.ScheduleTimeEntity;
+import org.binaracademy.finalproject.services.CategoryClassService;
 import org.binaracademy.finalproject.services.CityService;
 import org.binaracademy.finalproject.services.CountryService;
 import org.binaracademy.finalproject.services.ScheduleTimeService;
@@ -27,12 +29,17 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 public class MyCommandLineRunner implements CommandLineRunner {
-
+    @Autowired
     private final CityService cityService;
+
+    @Autowired
     private final CountryService countryService;
 
     @Autowired
     private final ScheduleTimeService scheTimeService;
+
+    @Autowired
+    private final CategoryClassService categoryService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -68,6 +75,14 @@ public class MyCommandLineRunner implements CommandLineRunner {
                 ;});
             }catch (IOException e){
                 log.info("Unable to save Schedule Time : {}", e.getMessage());
+            }
+        }
+
+        if(categoryService.getAll().isEmpty()) {
+            String[] ticketCategory = {"Economy", "Bussiness", "Executive"};
+            for(Integer i = 0 ; i<2 ; i++){
+                Long longI = Long.valueOf(i);
+                categoryService.create(new CategoryClassEntity(longI,ticketCategory[i],LocalDateTime.now(),null));
             }
         }
     }
