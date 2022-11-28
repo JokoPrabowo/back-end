@@ -69,10 +69,9 @@ public class MyCommandLineRunner implements CommandLineRunner {
                 scheduleTime.forEach(schedule -> {
                     List<TimeData> schTime = schedule.getScheduleTime();
 
-                    schTime.forEach(time -> {
-                        scheTimeService.create(new ScheduleTimeEntity(time.getId(), schedule.getDay(), time.getStart_time(), time.getEnd_time(), LocalDateTime.now(), null));
-                    })
-                ;});
+                    schTime.forEach(time ->
+                            scheTimeService.create(new ScheduleTimeEntity(time.getId(), schedule.getDay(), time.getStart_time(), time.getEnd_time(), LocalDateTime.now(), null)));
+                });
             }catch (IOException e){
                 log.info("Unable to save Schedule Time : {}", e.getMessage());
             }
