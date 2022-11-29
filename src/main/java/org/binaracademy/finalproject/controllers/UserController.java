@@ -1,33 +1,40 @@
 package org.binaracademy.finalproject.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.binaracademy.finalproject.dto.Request.GuestRequest;
-import org.binaracademy.finalproject.dto.GuestRequest;
+import org.binaracademy.finalproject.dto.Request.UserLoginRequest;
+import org.binaracademy.finalproject.dto.Request.UserRegisterRequest;
+import org.binaracademy.finalproject.dto.Response.CountryResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.ContactGuestEntity;
 import org.binaracademy.finalproject.entity.GuestEntity;
-import org.binaracademy.finalproject.services.ContactGuestService;
-import org.binaracademy.finalproject.services.GuestService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.binaracademy.finalproject.entity.UserEntity;
+import org.binaracademy.finalproject.services.CountryService;
+import org.binaracademy.finalproject.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/booking")
-public class BookingController {
-    @Autowired
-    private GuestService guestService;
-    @Autowired
-    private ContactGuestService contactGuestService;
+@RequestMapping("/api")
+@RequiredArgsConstructor
+public class UserController {
 
-    @PostMapping("/guest")
-    public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody GuestRequest data, Errors errors){
+    private final UserService userService;
+
+    @GetMapping("/test")
+    public String test(){
+        return "OK";
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody UserRegisterRequest data, Errors errors){
         try{
             ResponseData<Object> res = new ResponseData();
             if(errors.hasErrors()){
@@ -37,14 +44,15 @@ public class BookingController {
                 res.setData(null);
                 return ResponseEntity.badRequest().body(res);
             }
-            ContactGuestEntity contact = contactGuestService.create(new ContactGuestEntity(null, data.getFirstName(),
-                    data.getLastName(), data.getNoTelp(), data.getEmail(), null, null));
+
+            UserEntity user = userService.create(new UserEntity(null, data.getUsername(),
+                    data.getEmail(), data.getPassword(),null, LocalDateTime.now(), LocalDateTime.now()));
+
             res.setSuccess(true);
             res.setStatusCode(HttpStatus.CREATED.value());
             res.setMessage("Successfully!");
-            res.setData(guestService.create(new GuestEntity(null, data.getFirstName(), data.getLastName(), data.getBirthDate(),
-                    data.getNationality(), data.getCountry(), data.getPassport(), data.getEndPassport(), data.getGoogleId(),
-                    data.getUserId(), contact.getId(), null, null, null, null)));
+            res.setData(user);
+
             return ResponseEntity.ok(res);
         }catch (Exception e){
             ResponseData res = new ResponseData();
@@ -55,4 +63,6 @@ public class BookingController {
             return ResponseEntity.internalServerError().body(res);
         }
     }
+
+
 }
