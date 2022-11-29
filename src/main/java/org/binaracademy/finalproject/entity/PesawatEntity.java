@@ -25,8 +25,10 @@ public class PesawatEntity implements Serializable {
     private Long id;
     @Column(name = "pesawat_name", nullable = false)
     private String name;
+    @Column(name = "airport_id")
+    private Long airportId;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "airport_id", nullable = false)
+    @JoinColumn(name = "airport_id", insertable = false, updatable = false)
     private AirportEntity airport;
     @Column(name = "create_at")
     private LocalDateTime createAt;

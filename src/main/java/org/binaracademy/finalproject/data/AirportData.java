@@ -1,17 +1,15 @@
 package org.binaracademy.finalproject.data;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class CityData {
-
+@AllArgsConstructor
+public class AirportData {
     private String name;
-    private AirportData airport;
-
+    private List<PesawatData> pesawat;
 }
