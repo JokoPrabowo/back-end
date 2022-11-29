@@ -16,6 +16,14 @@ import org.binaracademy.finalproject.services.CityService;
 import org.binaracademy.finalproject.services.CountryService;
 import org.binaracademy.finalproject.services.ScheduleTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.binaracademy.finalproject.entity.AirportEntity;
+import org.binaracademy.finalproject.entity.CityEntity;
+import org.binaracademy.finalproject.entity.CountryEntity;
+import org.binaracademy.finalproject.entity.PesawatEntity;
+import org.binaracademy.finalproject.services.AirportService;
+import org.binaracademy.finalproject.services.CityService;
+import org.binaracademy.finalproject.services.CountryService;
+import org.binaracademy.finalproject.services.PesawatService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
@@ -41,6 +49,13 @@ public class MyCommandLineRunner implements CommandLineRunner {
     @Autowired
     private final CategoryClassService categoryService;
 
+    @Autowired
+    private final AirportService airportService;
+
+    @Autowired
+    private final PesawatService pesawatService;
+
+
     @Override
     public void run(String... args) throws Exception {
         if (countryService.getAll().isEmpty()) {
@@ -51,11 +66,17 @@ public class MyCommandLineRunner implements CommandLineRunner {
                 List<CountryData> country = mapper.readValue(inputStream, typeReference);
                 country.forEach(country1 -> {
                     countryService.create(new CountryEntity(country1.getId(), country1.getName(), LocalDateTime.now(), null));
-                    country1.getCity().forEach(cityData ->
-                            cityService.create(new CityEntity(null, cityData.getName(), LocalDateTime.now(), null, country1.getId(), null)));
+                    country1.getCity().forEach(cityData -> {
+                        CityEntity city = cityService.create(new CityEntity(null, cityData.getName(), LocalDateTime.now(), null, country1.getId(), null));
+                        AirportEntity airport = airportService.create(new AirportEntity(null, cityData.getAirport().getName(),
+                                city.getId(), LocalDateTime.now(), null, null));
+                        cityData.getAirport().getPesawat().forEach(pesawatData -> {
+                            pesawatService.create(new PesawatEntity(null, pesawatData.getName(), airport.getId(), null, null, null));
+                        });
+                    });
                 });
             }catch (IOException e){
-                log.info("Unable to save country : {}", e.getMessage());
+                log.info("Unable to save country : {}", e);
             }
         }
 
