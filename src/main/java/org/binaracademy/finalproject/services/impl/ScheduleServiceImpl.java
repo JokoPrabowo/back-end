@@ -25,7 +25,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         try {
             schedule.setCreateAt(LocalDateTime.now());
             ScheduleEntity scheduleEntity = scheduleRepo.save(schedule);
-            log.info("Country has been created : {}", schedule.getId());
+            log.info("Schedule has been created : {}", schedule.getId());
             return scheduleEntity;
         } catch (Exception e){
             log.error(ERROR_FOUND, e.getMessage());
@@ -47,11 +47,27 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public ScheduleEntity getOneSchedule(Long id) {
-        Optional<ScheduleEntity> schedule = scheduleRepo.findById(id);
-        if (schedule.isPresent()) {
-            return schedule.get();
+        try {
+            Optional<ScheduleEntity> schedule = scheduleRepo.findById(id);
+            return schedule.orElse(null);
+        }catch (Exception e){
+            log.error(ERROR_FOUND, e.getMessage());
+            return null;
         }
-        return null;
+    }
+
+    @Override
+    public List<ScheduleEntity> getFromTo(String departureAiport, String arrivalAirport) {
+        try {
+            List<ScheduleEntity> scheduleEntities = scheduleRepo.findScheduleFromTo(departureAiport, arrivalAirport);
+            if (scheduleEntities.isEmpty()) {
+                return Collections.emptyList();
+            }
+            return scheduleEntities;
+        }catch (Exception e){
+            log.error(ERROR_FOUND, e.getMessage());
+            return Collections.emptyList();
+        }
     }
 
 }

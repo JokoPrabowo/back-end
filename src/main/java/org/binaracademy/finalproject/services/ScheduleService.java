@@ -9,5 +9,6 @@ public interface ScheduleService {
     ScheduleEntity create(ScheduleEntity schedule);
     List<ScheduleEntity> getAll();
     ScheduleEntity getOneSchedule(Long id);
+    List<ScheduleEntity> getFromTo(String departureAiport, String arrivalAirport);
 
 }
