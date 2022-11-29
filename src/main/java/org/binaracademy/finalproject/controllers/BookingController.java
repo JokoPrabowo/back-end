@@ -1,7 +1,7 @@
 package org.binaracademy.finalproject.controllers;
 
 import org.binaracademy.finalproject.dto.Request.GuestRequest;
-import org.binaracademy.finalproject.dto.GuestRequest;
+import org.binaracademy.finalproject.dto.Request.GuestRequest;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.ContactGuestEntity;
 import org.binaracademy.finalproject.entity.GuestEntity;
