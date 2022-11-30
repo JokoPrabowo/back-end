@@ -11,6 +11,6 @@ public interface ScheduleService {
     List<ScheduleEntity> getAll();
     ScheduleEntity getOneSchedule(Long id);
     List<ScheduleEntity> getFromTo(String departureAiport, String arrivalAirport);
-    List<ScheduleEntity> getPageFromTo(String departureAiport, String arrivalAirport, Pageable pageable);
+    Iterable<ScheduleEntity> getPageFromTo(String departureAiport, String arrivalAirport, Pageable pageable);
 
 }

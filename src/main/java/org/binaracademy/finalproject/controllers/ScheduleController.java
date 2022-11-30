@@ -15,6 +15,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -30,17 +31,11 @@ public class ScheduleController {
         ResponseData<ScheduleEntity> response = new ResponseData<>();
 
         try {
-            ScheduleEntity scheduleEntity = scheduleService.create(ScheduleEntity.builder()
-                    .departureAiport(scheduleRequest.getDepartureAiport())
-                    .arrivalAirport(scheduleRequest.getArrivalAirport())
-                    .price(scheduleRequest.getPrice())
-                    .maxSeat(scheduleRequest.getMaxSeat())
-                    .date(scheduleRequest.getDate())
-                    .scheduleTimeId(scheduleRequest.getScheduleTimeId())
-                    .categoryClassId(scheduleRequest.getCategoryClassId())
-                    .pesawatId(scheduleRequest.getPesawatId()).build());
+            ScheduleEntity schedule = new ScheduleEntity(null, scheduleRequest.getDepartureAiport(), scheduleRequest.getArrivalAirport(),
+                    scheduleRequest.getPrice(), scheduleRequest.getMaxSeat(), scheduleRequest.getDate(), scheduleRequest.getScheduleTimeId(),
+                    scheduleRequest.getCategoryClassId(), scheduleRequest.getPesawatId(), null, null, null, LocalDateTime.now(), null);
 
-            response.setData(scheduleEntity);
+            response.setData(scheduleService.create(schedule));
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage("Successfully!");
@@ -55,19 +50,39 @@ public class ScheduleController {
     }
 
     @PostMapping("/getSchedule/{size}/{page}/{sort}")
-    public ResponseEntity<ResponseData<List<ScheduleEntity>>> getPageSchedule(@RequestBody SchedulePageRequest schedulePageRequest,
+    public ResponseEntity<ResponseData<Iterable<ScheduleEntity>>> getPageSchedule(@RequestBody SchedulePageRequest schedulePageRequest,
                                                                              @PathVariable("size") int size, @PathVariable("page") int page,
                                                                               @PathVariable("sort") String sort){
+
+        ResponseData<Iterable<ScheduleEntity>> response = new ResponseData<>();
+
+        try {
+            Pageable pageable = PageRequest.of(page, size, Sort.by("schedule_id"));
+            if (sort.equalsIgnoreCase("desc")){
+                pageable = PageRequest.of(page, size, Sort.by("schedule_id").descending());
+            }
+            response.setData(scheduleService.getPageFromTo(schedulePageRequest.getDepartureAiport(),
+                    schedulePageRequest.getArrivalAirport(), pageable));
+            response.setSuccess(true);
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setMessage("Successfully!");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage(e.getMessage());
+            response.setData(null);
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    @PostMapping("/getSchedule")
+    public ResponseEntity<ResponseData<List<ScheduleEntity>>> getSchedule(@RequestBody SchedulePageRequest schedulePageRequest){
 
         ResponseData<List<ScheduleEntity>> response = new ResponseData<>();
 
         try {
-            Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-            if (sort.equalsIgnoreCase("desc")){
-                pageable = PageRequest.of(page, size, Sort.by("id").descending());
-            }
-            response.setData(scheduleService.getPageFromTo(schedulePageRequest.getDepartureAiport(),
-                    schedulePageRequest.getArrivalAirport(), pageable));
+            response.setData(scheduleService.getFromTo(schedulePageRequest.getDepartureAiport(), schedulePageRequest.getArrivalAirport()));
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage("Successfully!");

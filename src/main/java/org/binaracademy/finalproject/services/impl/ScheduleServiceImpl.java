@@ -8,6 +8,7 @@ import org.binaracademy.finalproject.services.ScheduleService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<ScheduleEntity> getAll() {
         try {
-            List<ScheduleEntity> scheduleEntities = scheduleRepo.findAll();
+            List<ScheduleEntity> scheduleEntities = (List<ScheduleEntity>) scheduleRepo.findAll();
             log.info("call getAll succses");
             return scheduleEntities;
         } catch (Exception e){
@@ -50,6 +51,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleEntity getOneSchedule(Long id) {
         try {
             Optional<ScheduleEntity> schedule = scheduleRepo.findById(id);
+            log.info("call getOneSchedule succses");
             return schedule.orElse(null);
         }catch (Exception e){
             log.error(ERROR_FOUND, e.getMessage());
@@ -60,10 +62,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<ScheduleEntity> getFromTo(String departureAiport, String arrivalAirport) {
         try {
-            List<ScheduleEntity> scheduleEntities = scheduleRepo.findScheduleFromTo(departureAiport, arrivalAirport);
+            List<ScheduleEntity> scheduleEntities = scheduleRepo.findScheduleFromTo(departureAiport, arrivalAirport, LocalDate.now());
             if (scheduleEntities.isEmpty()) {
                 return Collections.emptyList();
             }
+            log.info("call getFromTo succses");
             return scheduleEntities;
         }catch (Exception e){
             log.error(ERROR_FOUND, e.getMessage());
@@ -72,13 +75,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleEntity> getPageFromTo(String departureAiport, String arrivalAirport, Pageable pageable) {
+    public Iterable<ScheduleEntity> getPageFromTo(String departureAiport, String arrivalAirport, Pageable pageable) {
         try {
-            List<ScheduleEntity> scheduleEntities = (List<ScheduleEntity>) scheduleRepo.findScheduleFromToPage(departureAiport, arrivalAirport, pageable);
-            if (scheduleEntities.isEmpty()) {
+            Iterable<ScheduleEntity> scheduleEntities = scheduleRepo.findScheduleFromToPage(
+                    departureAiport, arrivalAirport, LocalDate.now(), pageable);
+            if (scheduleEntities == null) {
                 return Collections.emptyList();
             }
-            log.info("call ggetPageFromTo succses");
+            log.info("call getPageFromTo succses");
             return scheduleEntities;
         }catch (Exception e){
             log.error(ERROR_FOUND, e.getMessage());

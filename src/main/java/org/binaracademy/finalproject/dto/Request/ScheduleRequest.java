@@ -3,9 +3,9 @@ package org.binaracademy.finalproject.dto.Request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.binaracademy.finalproject.entity.ScheduleTimeEntity;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -18,17 +18,17 @@ public class ScheduleRequest {
     private String departureAiport;
     @NotEmpty(message = "arrivalAirport is required")
     private String arrivalAirport;
-    @NotEmpty(message = "price is required")
+    @NotNull(message = "price is required")
     private BigDecimal price;
-    @NotEmpty(message = "maxSeat is required")
+    @NotNull(message = "maxSeat is required")
     private Integer maxSeat;
-    @NotEmpty(message = "date is required")
+    @NotNull(message = "date is required")
     private LocalDate date;
-    @NotEmpty(message = "scheduleTime is required")
+    @NotNull(message = "scheduleTimeId is required")
     private Long scheduleTimeId;
-    @NotEmpty(message = "categoryClass is required")
+    @NotNull(message = "categoryClassId is required")
     private Long categoryClassId;
-    @NotEmpty(message = "pesawat is required")
+    @NotNull(message = "pesawatId is required")
     private Long pesawatId;
 
 }
