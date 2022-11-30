@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.binaracademy.finalproject.dto.Response.CityResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.services.CityService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ public class CityController {
     @GetMapping("/getCity/{countryId}")
     public ResponseEntity<ResponseData<List<CityResponse>>> getCity(@PathVariable("countryId") Long countryId){
 
-        ResponseData<List<CityResponse>> rs = new ResponseData<>();
+        ResponseData<List<CityResponse>> response = new ResponseData<>();
 
         try {
             List<CityResponse> cityResponses = new ArrayList<>();
@@ -33,17 +34,17 @@ public class CityController {
                     .cityName(city.getName())
                     .countryName(city.getCountry().getName()).build()));
 
-            rs.setSuccess(true);
-            rs.setStatusCode(200);
-            rs.setMessage("Successfully!");
-            rs.setData(cityResponses);
-            return ResponseEntity.ok(rs);
+            response.setSuccess(true);
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setMessage("Successfully!");
+            response.setData(cityResponses);
+            return ResponseEntity.ok(response);
         }catch (Exception e){
-            rs.setSuccess(false);
-            rs.setStatusCode(500);
-            rs.setMessage(e.getMessage());
-            rs.setData(null);
-            return ResponseEntity.internalServerError().body(rs);
+            response.setSuccess(false);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage(e.getMessage());
+            response.setData(null);
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 

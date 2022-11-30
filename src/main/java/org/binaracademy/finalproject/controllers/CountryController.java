@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.binaracademy.finalproject.dto.Response.CountryResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.services.CountryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,26 +23,26 @@ public class CountryController {
     @GetMapping("/getCountry")
     public ResponseEntity<ResponseData<List<CountryResponse>>> getCountry(){
 
-        ResponseData<List<CountryResponse>> rs = new ResponseData<>();
+        ResponseData<List<CountryResponse>> response = new ResponseData<>();
 
         try {
-            List<CountryResponse> cs = new ArrayList<>();
+            List<CountryResponse> countryResponses = new ArrayList<>();
             countryService.getAll().forEach(country
-                    -> cs.add(CountryResponse.builder()
+                    -> countryResponses.add(CountryResponse.builder()
                     .id(country.getId())
                     .countryName(country.getName()).build()));
 
-            rs.setSuccess(true);
-            rs.setStatusCode(200);
-            rs.setMessage("Successfully!");
-            rs.setData(cs);
-            return ResponseEntity.ok(rs);
+            response.setSuccess(true);
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setMessage("Successfully!");
+            response.setData(countryResponses);
+            return ResponseEntity.ok(response);
         }catch (Exception e){
-            rs.setSuccess(false);
-            rs.setStatusCode(500);
-            rs.setMessage(e.getMessage());
-            rs.setData(null);
-            return ResponseEntity.internalServerError().body(rs);
+            response.setSuccess(false);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage(e.getMessage());
+            response.setData(null);
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 

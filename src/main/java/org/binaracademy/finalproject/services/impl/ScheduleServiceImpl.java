@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.binaracademy.finalproject.entity.ScheduleEntity;
 import org.binaracademy.finalproject.repositories.ScheduleRepo;
 import org.binaracademy.finalproject.services.ScheduleService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -63,6 +64,21 @@ public class ScheduleServiceImpl implements ScheduleService {
             if (scheduleEntities.isEmpty()) {
                 return Collections.emptyList();
             }
+            return scheduleEntities;
+        }catch (Exception e){
+            log.error(ERROR_FOUND, e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<ScheduleEntity> getPageFromTo(String departureAiport, String arrivalAirport, Pageable pageable) {
+        try {
+            List<ScheduleEntity> scheduleEntities = (List<ScheduleEntity>) scheduleRepo.findScheduleFromToPage(departureAiport, arrivalAirport, pageable);
+            if (scheduleEntities.isEmpty()) {
+                return Collections.emptyList();
+            }
+            log.info("call ggetPageFromTo succses");
             return scheduleEntities;
         }catch (Exception e){
             log.error(ERROR_FOUND, e.getMessage());
