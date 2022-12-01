@@ -17,17 +17,13 @@ import org.binaracademy.finalproject.services.CountryService;
 import org.binaracademy.finalproject.services.ScheduleTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.binaracademy.finalproject.entity.AirportEntity;
-import org.binaracademy.finalproject.entity.CityEntity;
-import org.binaracademy.finalproject.entity.CountryEntity;
 import org.binaracademy.finalproject.entity.PesawatEntity;
 import org.binaracademy.finalproject.services.AirportService;
-import org.binaracademy.finalproject.services.CityService;
-import org.binaracademy.finalproject.services.CountryService;
 import org.binaracademy.finalproject.services.PesawatService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.DataInput;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -70,13 +66,12 @@ public class MyCommandLineRunner implements CommandLineRunner {
                         CityEntity city = cityService.create(new CityEntity(null, cityData.getName(), LocalDateTime.now(), null, country1.getId(), null));
                         AirportEntity airport = airportService.create(new AirportEntity(null, cityData.getAirport().getName(),
                                 city.getId(), LocalDateTime.now(), null, null));
-                        cityData.getAirport().getPesawat().forEach(pesawatData -> {
-                            pesawatService.create(new PesawatEntity(null, pesawatData.getName(), airport.getId(), null, null, null));
-                        });
+                        cityData.getAirport().getPesawat().forEach(pesawatData ->
+                                pesawatService.create(new PesawatEntity(null, pesawatData.getName(), airport.getId(), null, null, null)));
                     });
                 });
             }catch (IOException e){
-                log.info("Unable to save country : {}", e);
+                log.info("Unable to save country : {}", e.getMessage());
             }
         }
 
