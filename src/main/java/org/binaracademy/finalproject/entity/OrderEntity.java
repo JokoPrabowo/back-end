@@ -41,9 +41,6 @@ public class OrderEntity implements Serializable {
     @Column(name = "schedule_id")
     private Long scheduleId;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "email_user", insertable = false, updatable = false)
-    private UserEntity user;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "schedule_id", insertable = false, updatable = false)
     private ScheduleEntity schedule;
     @Column(name = "create_at")

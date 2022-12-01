@@ -21,18 +21,27 @@ public class TicketEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ticket_id")
     private Long id;
+    @Column(name = "status")
     private Boolean status;
+    @Column(name = "schedule_id")
+    private Long scheduleId;
+    @Column(name = "seat_id")
+    private Long seatId;
+    @Column(name = "guest_id")
+    private Long guestId;
+    @Column(name = "order_id")
+    private Long orderId;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "schedule_id", nullable = false)
+    @JoinColumn(name = "schedule_id", insertable = false, updatable = false)
     private ScheduleEntity schedule;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "seat_id", nullable = false)
+    @JoinColumn(name = "seat_id", insertable = false, updatable = false)
     private SeatEntity seat;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "guest_id", nullable = false)
+    @JoinColumn(name = "guest_id", insertable = false, updatable = false)
     private GuestEntity guest;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id", nullable = false, referencedColumnName = "order_id")
+    @JoinColumn(name = "order_id", insertable = false, updatable = false, referencedColumnName = "order_id")
     private OrderEntity order;
 
 }
