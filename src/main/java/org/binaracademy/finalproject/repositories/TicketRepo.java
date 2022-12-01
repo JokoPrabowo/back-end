@@ -16,7 +16,7 @@ public interface TicketRepo extends JpaRepository<TicketEntity, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "INSERT INTO order_detail (seat_id, schedule_id, studio_id, order_id, username)\n" +
-            "VALUES (:seatId, :scheduleId, :studioId, :orderId, :userId)", nativeQuery = true)
-    void createOrderDetail(Long seatId, Long scheduleId, Long studioId, Long orderId, Long userId);
+    @Query(value = "INSERT INTO order_detail (status, schedule_id, seat_id, guest_id, order_id)\n" +
+                                    "VALUES (:status, :scheduleId, :seatId, :guestId, :orderId)", nativeQuery = true)
+    void createOrderDetail(Boolean status, Long scheduleId, Long seatId, Long guestId, Long orderId);
 }
