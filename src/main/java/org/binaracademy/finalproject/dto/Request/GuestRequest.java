@@ -29,6 +29,8 @@ public class GuestRequest {
     private String googleId;
     @NotNull(message = "user id shouldn't be null")
     private Long userId;
+    private String guestFirstname;
+    private String guestLastname;
     @Pattern(regexp = "^[0-9]*$", message = "phone number is invalid")
     private String noTelp;
     @Email(message = "email address is invalid")
