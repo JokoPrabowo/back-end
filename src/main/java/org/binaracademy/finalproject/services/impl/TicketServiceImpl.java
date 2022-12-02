@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -37,5 +39,29 @@ public class TicketServiceImpl implements TicketService {
             log.error(ERROR_FOUND, e.getMessage());
             return Collections.emptyList();
         }
+    }
+
+    public List<TicketEntity> update(OrderTicketRequest orderTicketRequest) {
+        try{
+            List<TicketEntity> ticket = new ArrayList<>();
+            IntStream.range(0, orderTicketRequest.getSeatId().size()).forEach(x -> {
+                TicketEntity data = findByGuestId(orderTicketRequest.getGuestId().get(x));
+                data.setSeatId(orderTicketRequest.getSeatId().get(x));
+                ticket.add(ticketRepo.save(data));
+            });
+            log.info("Ticket has been created : {}", orderTicketRequest.getUserEmail());
+            return ticket;
+        }catch (Exception e){
+            log.error(ERROR_FOUND, e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public TicketEntity findByGuestId(Long guestId){
+        Optional<TicketEntity> data = ticketRepo.findByGuestId(guestId);
+        if(data.isEmpty()){
+            return null;
+        }
+        return data.get();
     }
 }

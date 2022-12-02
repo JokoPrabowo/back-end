@@ -9,4 +9,7 @@ public interface TicketService {
 
     List<TicketEntity> create(OrderTicketRequest orderTicketRequest);
 
+    List<TicketEntity> update(OrderTicketRequest orderTicketRequest);
+    TicketEntity findByGuestId(Long guestId);
+
 }
