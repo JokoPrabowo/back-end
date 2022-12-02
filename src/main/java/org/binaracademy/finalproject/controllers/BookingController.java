@@ -1,12 +1,14 @@
 package org.binaracademy.finalproject.controllers;
 
 import org.binaracademy.finalproject.dto.Request.GuestRequest;
-import org.binaracademy.finalproject.dto.Request.GuestRequest;
+import org.binaracademy.finalproject.dto.Request.OrderTicketRequest;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.ContactGuestEntity;
 import org.binaracademy.finalproject.entity.GuestEntity;
+import org.binaracademy.finalproject.entity.OrderEntity;
 import org.binaracademy.finalproject.services.ContactGuestService;
 import org.binaracademy.finalproject.services.GuestService;
+import org.binaracademy.finalproject.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,9 @@ public class BookingController {
     private GuestService guestService;
     @Autowired
     private ContactGuestService contactGuestService;
+
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("/guest")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody GuestRequest data, Errors errors){
@@ -53,6 +58,31 @@ public class BookingController {
             res.setMessage("Failed!");
             res.setData(null);
             return ResponseEntity.internalServerError().body(res);
+        }
+    }
+
+    @PostMapping("/ticket")
+    public ResponseEntity<ResponseData<OrderEntity>> create(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
+        ResponseData<OrderEntity> response = new ResponseData<>();
+        try {
+            if(errors.hasErrors()){
+                response.setData(null);
+                response.setSuccess(false);
+                response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                response.setMessage("Failed!");
+                return ResponseEntity.badRequest().body(response);
+            }
+            response.setData(orderService.create(orderTicketRequest));
+            response.setSuccess(true);
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setMessage("Successfully!");
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.setData(null);
+            response.setSuccess(false);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage(e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 }
