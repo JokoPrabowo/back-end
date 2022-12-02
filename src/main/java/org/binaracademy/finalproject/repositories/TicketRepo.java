@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TicketRepo extends JpaRepository<TicketEntity, Long> {
@@ -19,5 +21,7 @@ public interface TicketRepo extends JpaRepository<TicketEntity, Long> {
     @Query(value = "INSERT INTO ticket (status, schedule_id, seat_id, guest_id, order_id)\n" +
                                     "VALUES (:status, :scheduleId, :seatId, :guestId, :orderId)", nativeQuery = true)
     TicketEntity createOrderDetail(Boolean status, Long scheduleId, Long seatId, Long guestId, Long orderId);
+
+    Optional<TicketEntity> findByGuestId(Long guestId);
 
 }
