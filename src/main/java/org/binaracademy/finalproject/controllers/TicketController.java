@@ -21,31 +21,6 @@ import java.util.List;
 public class TicketController {
     private final TicketService ticketService;
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseData<List<TicketEntity>>> create(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
-        ResponseData<List<TicketEntity>> response = new ResponseData<>();
-        try {
-            if(errors.hasErrors()){
-                response.setData(null);
-                response.setSuccess(false);
-                response.setStatusCode(HttpStatus.BAD_REQUEST.value());
-                response.setMessage("Failed!");
-                return ResponseEntity.badRequest().body(response);
-            }
-            response.setData(ticketService.create(orderTicketRequest));
-            response.setSuccess(true);
-            response.setStatusCode(HttpStatus.OK.value());
-            response.setMessage("Successfully!");
-            return ResponseEntity.ok(response);
-        }catch (Exception e){
-            response.setData(null);
-            response.setSuccess(false);
-            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.setMessage(e.getMessage());
-            return ResponseEntity.internalServerError().body(response);
-        }
-    }
-
     @PutMapping("/update")
     public ResponseEntity<ResponseData<List<TicketEntity>>> update(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
         ResponseData<List<TicketEntity>> response = new ResponseData<>();

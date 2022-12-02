@@ -6,9 +6,11 @@ import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.ContactGuestEntity;
 import org.binaracademy.finalproject.entity.GuestEntity;
 import org.binaracademy.finalproject.entity.OrderEntity;
+import org.binaracademy.finalproject.entity.TicketEntity;
 import org.binaracademy.finalproject.services.ContactGuestService;
 import org.binaracademy.finalproject.services.GuestService;
 import org.binaracademy.finalproject.services.OrderService;
+import org.binaracademy.finalproject.services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/booking")
@@ -28,6 +31,8 @@ public class BookingController {
     @Autowired
     private ContactGuestService contactGuestService;
 
+    @Autowired
+    private TicketService ticketService;
     @Autowired
     private OrderService orderService;
 
@@ -61,9 +66,9 @@ public class BookingController {
         }
     }
 
-    @PostMapping("/ticket")
-    public ResponseEntity<ResponseData<OrderEntity>> create(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
-        ResponseData<OrderEntity> response = new ResponseData<>();
+    @PostMapping("/add")
+    public ResponseEntity<ResponseData<List<TicketEntity>>> create(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
+        ResponseData<List<TicketEntity>> response = new ResponseData<>();
         try {
             if(errors.hasErrors()){
                 response.setData(null);
@@ -72,7 +77,8 @@ public class BookingController {
                 response.setMessage("Failed!");
                 return ResponseEntity.badRequest().body(response);
             }
-            response.setData(orderService.create(orderTicketRequest));
+            orderService.create(orderTicketRequest);
+            response.setData(ticketService.create(orderTicketRequest));
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage("Successfully!");
