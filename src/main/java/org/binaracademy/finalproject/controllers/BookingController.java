@@ -52,7 +52,7 @@ public class BookingController {
             res.setSuccess(true);
             res.setStatusCode(HttpStatus.CREATED.value());
             res.setMessage("Successfully!");
-            res.setData(guestService.create(new GuestEntity(null, data.getFirstName(), data.getLastName(), data.getBirthDate(),
+            res.setData(guestService.create(new GuestEntity(null, data.getGuestFirstname(), data.getGuestLastname(), data.getBirthDate(),
                     data.getNationality(), data.getCountry(), data.getPassport(), data.getEndPassport(), data.getGoogleId(),
                     data.getUserId(), contact.getId(), null, null, null, null)));
             return ResponseEntity.ok(res);
