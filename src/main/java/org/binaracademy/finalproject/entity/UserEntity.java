@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,9 +38,13 @@ public class UserEntity implements Serializable {
     private String password;
     @Column(name = "profile")
     private String profile;
-    @Column(name = "create_at")
+
+    @Column(name = "create_at",updatable = false)
+    @CreationTimestamp
     private LocalDateTime createAt;
+
     @Column(name = "update_at")
+    @UpdateTimestamp
     private LocalDateTime updateAt;
 
     @ManyToMany(fetch = FetchType.LAZY)

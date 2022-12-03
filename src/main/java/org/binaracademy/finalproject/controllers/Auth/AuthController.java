@@ -79,8 +79,8 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
         logger.info("sukses login user : {}", loginRequest.getUsername());
-        responseData.setStatusCode(StatusCode.BAD_REQUEST);
-        responseData.setSuccess(false);
+        responseData.setStatusCode(StatusCode.OK);
+        responseData.setSuccess(true);
         responseData.setMessage("sukses");
         responseData.setData(new JwtResponse(jwt,
                 userDetails.getId(),
@@ -91,8 +91,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseData<String>> registerUser(@Valid @RequestBody SignupRequest signUpRequest, Errors errors) {
-        ResponseData<String> responseData = new ResponseData<>();
+    public ResponseEntity<ResponseData<UserEntity>> registerUser(@Valid @RequestBody SignupRequest signUpRequest, Errors errors) {
+        ResponseData<UserEntity> responseData = new ResponseData<>();
         if (errors.hasErrors()) {
             responseData.setStatusCode(StatusCode.BAD_REQUEST);
             responseData.setSuccess(false);
@@ -161,6 +161,7 @@ public class AuthController {
         responseData.setStatusCode(StatusCode.OK);
         responseData.setSuccess(true);
         responseData.setMessage("User registered successfully!");
+        responseData.setData(user);
         logger.info("new signup sukses user : {}", signUpRequest.getUsername());
         return ResponseEntity.ok(responseData);
     }
