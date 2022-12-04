@@ -5,7 +5,6 @@ import org.binaracademy.finalproject.dto.Request.OrderTicketRequest;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.ContactGuestEntity;
 import org.binaracademy.finalproject.entity.GuestEntity;
-import org.binaracademy.finalproject.entity.OrderEntity;
 import org.binaracademy.finalproject.entity.TicketEntity;
 import org.binaracademy.finalproject.services.ContactGuestService;
 import org.binaracademy.finalproject.services.GuestService;
@@ -38,8 +37,8 @@ public class BookingController {
 
     @PostMapping("/guest")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody GuestRequest data, Errors errors){
+        ResponseData<Object> res = new ResponseData();
         try{
-            ResponseData<Object> res = new ResponseData();
             if(errors.hasErrors()){
                 res.setSuccess(false);
                 res.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -57,7 +56,6 @@ public class BookingController {
                     data.getUserId(), contact.getId(), null, null, null, null)));
             return ResponseEntity.ok(res);
         }catch (Exception e){
-            ResponseData res = new ResponseData();
             res.setSuccess(false);
             res.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
             res.setMessage("Failed!");
