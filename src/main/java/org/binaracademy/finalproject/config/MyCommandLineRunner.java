@@ -22,7 +22,6 @@ import org.binaracademy.finalproject.services.AirportService;
 import org.binaracademy.finalproject.services.PesawatService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import com.fasterxml.jackson.datatype.jsr310.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,13 +67,12 @@ public class MyCommandLineRunner implements CommandLineRunner {
                         CityEntity city = cityService.create(new CityEntity(null, cityData.getName(), LocalDateTime.now(), null, country1.getId(), null));
                         AirportEntity airport = airportService.create(new AirportEntity(null, cityData.getAirport().getName(),
                                 city.getId(), LocalDateTime.now(), null, null));
-                        cityData.getAirport().getPesawat().forEach(pesawatData -> {
-                            pesawatService.create(new PesawatEntity(null, pesawatData.getName(), airport.getId(), null, null, null));
-                        });
+                        cityData.getAirport().getPesawat().forEach(pesawatData ->
+                                pesawatService.create(new PesawatEntity(null, pesawatData.getName(), airport.getId(), null, null, null)));
                     });
                 });
             }catch (IOException e){
-                log.info("Unable to save country : {}", e);
+                log.info("Unable to save country : {}", e.getMessage());
             }
         }
 
