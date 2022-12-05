@@ -16,12 +16,6 @@ public interface TicketRepo extends JpaRepository<TicketEntity, Long> {
     @Query(value = "SELECT order_id FROM orders WHERE schedule_id = :scheduleId AND email_user = :userEmail", nativeQuery = true)
     Long findOrderIdByScheduleIdAndUsername(Long scheduleId, String userEmail);
 
-//    @Transactional
-//    @Modifying(clearAutomatically = true)
-//    @Query(value = "INSERT INTO ticket (status, schedule_id, seat_id, guest_id, order_id)\n" +
-//                                    "VALUES (:status, :scheduleId, :seatId, :guestId, :orderId)", nativeQuery = true)
-//    TicketEntity createOrderDetail(Boolean status, Long scheduleId, Long seatId, Long guestId, Long orderId);
-
     Optional<TicketEntity> findByGuestId(Long guestId);
 
 }

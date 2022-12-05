@@ -19,11 +19,4 @@ public interface OrderRepo extends JpaRepository<OrderEntity, Long> {
     @Query(value = "SELECT price FROM schedules WHERE schedule_id = :scheduleId", nativeQuery = true)
     BigDecimal findPriceSchedule(Long scheduleId);
 
-//    @Transactional
-//    @Modifying(clearAutomatically = true)
-//    @Query(value = "INSERT INTO orders (status, total_price, tax, total_pay, expired_at, email_user, schedule_id, create_at)\n" +
-//                            "VALUES (:status, :totalPrice, :tax, :totalPay, :expiredAt, :userEmail, :scheduleId, :createAt)", nativeQuery = true)
-//    OrderEntity createOrder(Boolean status, BigDecimal totalPrice, BigDecimal tax, BigDecimal totalPay,
-//                     LocalDateTime expiredAt, String userEmail, Long scheduleId, LocalDateTime createAt);
-
 }
