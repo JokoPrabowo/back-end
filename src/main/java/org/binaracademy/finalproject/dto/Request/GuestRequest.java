@@ -19,12 +19,12 @@ public class GuestRequest {
     private String firstName;
     @NotNull(message = "last name shouldn't be null")
     private String lastName;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
     private String nationality;
     private String country;
     private String passport;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endPassport;
     private String googleId;
     @NotNull(message = "user id shouldn't be null")
