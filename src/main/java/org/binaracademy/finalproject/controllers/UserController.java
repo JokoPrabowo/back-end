@@ -50,8 +50,8 @@ public class UserController {
                 return ResponseEntity.badRequest().body(res);
             }
 
-            UserEntity user = userService.create(new UserEntity(null, data.getUsername(),
-                    data.getEmail(), data.getPassword(),null, LocalDateTime.now(), LocalDateTime.now()));
+            UserEntity user = userService.create(new UserEntity(data.getUsername(),
+                    data.getEmail(), data.getPassword()));
 
             res.setSuccess(true);
             res.setStatusCode(HttpStatus.CREATED.value());
