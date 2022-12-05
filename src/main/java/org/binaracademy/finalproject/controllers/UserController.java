@@ -1,6 +1,7 @@
 package org.binaracademy.finalproject.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.binaracademy.finalproject.dto.Request.GuestRequest;
 import org.binaracademy.finalproject.dto.Request.UserLoginRequest;
 import org.binaracademy.finalproject.dto.Request.UserRegisterRequest;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -40,8 +42,11 @@ public class UserController {
             if(errors.hasErrors()){
                 res.setSuccess(false);
                 res.setStatusCode(HttpStatus.BAD_REQUEST.value());
-                res.setMessage("Failed!");
+                res.setMessage("Failed! ");
                 res.setData(null);
+                errors.getAllErrors().forEach(x ->{
+                    System.out.println(x);
+                });
                 return ResponseEntity.badRequest().body(res);
             }
 

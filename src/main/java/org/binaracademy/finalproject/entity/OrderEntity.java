@@ -36,6 +36,13 @@ public class OrderEntity implements Serializable {
     private BigDecimal totalPay;
     @Column(name = "expired_at")
     private LocalDateTime expiredAt;
+    @Column(name = "email_user")
+    private String userEmail;
+    @Column(name = "schedule_id")
+    private Long scheduleId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "schedule_id", insertable = false, updatable = false)
+    private ScheduleEntity schedule;
     @Column(name = "create_at")
     private LocalDateTime createAt;
     @Column(name = "update_at")

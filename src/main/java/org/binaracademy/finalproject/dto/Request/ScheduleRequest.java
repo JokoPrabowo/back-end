@@ -1,5 +1,6 @@
 package org.binaracademy.finalproject.dto.Request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class ScheduleRequest {
     private BigDecimal price;
     @NotNull(message = "maxSeat is required")
     private Integer maxSeat;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "date is required")
     private LocalDate date;
     @NotNull(message = "scheduleTimeId is required")

@@ -13,6 +13,6 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class TimeData {
     private Long id;
-    private LocalTime start_time;
-    private LocalTime end_time;
+    private String start_time;
+    private String end_time;
 }

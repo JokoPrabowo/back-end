@@ -9,17 +9,25 @@ import org.binaracademy.finalproject.data.ScheduleTimeData;
 import org.binaracademy.finalproject.data.SeatData;
 import org.binaracademy.finalproject.data.TimeData;
 import org.binaracademy.finalproject.entity.*;
-import org.binaracademy.finalproject.services.*;
+import org.binaracademy.finalproject.repositories.RoleRepo;
+import org.binaracademy.finalproject.services.CategoryClassService;
+import org.binaracademy.finalproject.services.CityService;
+import org.binaracademy.finalproject.services.CountryService;
+import org.binaracademy.finalproject.services.ScheduleTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.binaracademy.finalproject.services.AirportService;
+import org.binaracademy.finalproject.services.PesawatService;
+import org.binaracademy.finalproject.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Configuration
@@ -44,6 +52,7 @@ public class MyCommandLineRunner implements CommandLineRunner {
     private final PesawatService pesawatService;
 
     @Autowired
+    private final RoleRepo roleRepo;
     private final SeatService seatService;
 
 
@@ -77,23 +86,32 @@ public class MyCommandLineRunner implements CommandLineRunner {
 
             try {
                 List<ScheduleTimeData> scheduleTime = mapper.readValue(inputStream, typeReference);
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss");
                 scheduleTime.forEach(schedule -> {
                     List<TimeData> schTime = schedule.getScheduleTime();
 
                     schTime.forEach(time ->
-                            scheTimeService.create(new ScheduleTimeEntity(time.getId(), schedule.getDay(), time.getStart_time(), time.getEnd_time(), LocalDateTime.now(), null)));
+                            scheTimeService.create(new ScheduleTimeEntity(time.getId(), schedule.getDay(), LocalTime.parse(time.getStart_time(), format), LocalTime.parse(time.getEnd_time(), format), LocalDateTime.now(), null)));
                 });
             }catch (IOException e){
-                log.info("Unable to save Schedule Time : {}", e.getMessage());
+                log.info("Unable to save Schedule Time : {}", e);
             }
         }
 
         if(categoryService.getAll().isEmpty()) {
             String[] ticketCategory = {"Economy", "Bussiness", "Executive"};
-            for(Integer i = 0 ; i<2 ; i++){
+            for(Integer i = 0 ; i<3 ; i++){
                 Long longI = Long.valueOf(i);
                 categoryService.create(new CategoryClassEntity(longI,ticketCategory[i],LocalDateTime.now(),null));
             }
+        }
+
+        if(roleRepo.findAll().isEmpty()) {
+            String[] roles = {"ROLE_ADMIN", "ROLE_USER"};
+            IntStream.range(0, roles.length).forEach(x -> {
+                roleRepo.save(new RoleEntity(ERole.valueOf(roles[x])));
+                log.info("Role has been created : {}", roles[x]);
+            });
         }
 
         if (seatService.getAll().isEmpty()){
