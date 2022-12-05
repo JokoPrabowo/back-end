@@ -7,17 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.binaracademy.finalproject.data.CountryData;
 import org.binaracademy.finalproject.data.ScheduleTimeData;
 import org.binaracademy.finalproject.data.TimeData;
-import org.binaracademy.finalproject.entity.CategoryClassEntity;
-import org.binaracademy.finalproject.entity.CityEntity;
-import org.binaracademy.finalproject.entity.CountryEntity;
-import org.binaracademy.finalproject.entity.ScheduleTimeEntity;
+import org.binaracademy.finalproject.entity.*;
+import org.binaracademy.finalproject.repositories.RoleRepo;
 import org.binaracademy.finalproject.services.CategoryClassService;
 import org.binaracademy.finalproject.services.CityService;
 import org.binaracademy.finalproject.services.CountryService;
 import org.binaracademy.finalproject.services.ScheduleTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.binaracademy.finalproject.entity.AirportEntity;
-import org.binaracademy.finalproject.entity.PesawatEntity;
 import org.binaracademy.finalproject.services.AirportService;
 import org.binaracademy.finalproject.services.PesawatService;
 import org.springframework.boot.CommandLineRunner;
@@ -29,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Configuration
@@ -51,6 +48,9 @@ public class MyCommandLineRunner implements CommandLineRunner {
 
     @Autowired
     private final PesawatService pesawatService;
+
+    @Autowired
+    private final RoleRepo roleRepo;
 
 
     @Override
@@ -101,6 +101,14 @@ public class MyCommandLineRunner implements CommandLineRunner {
                 Long longI = Long.valueOf(i);
                 categoryService.create(new CategoryClassEntity(longI,ticketCategory[i],LocalDateTime.now(),null));
             }
+        }
+
+        if(roleRepo.findAll().isEmpty()){
+            String[] roles = {"ROLE_ADMIN", "ROLE_USER"};
+            IntStream.range(0, roles.length).forEach(x ->{
+                roleRepo.save(new RoleEntity(ERole.valueOf(roles[x])));
+                log.info("Role has been created : {}", roles[x]);
+                    });
         }
     }
 
