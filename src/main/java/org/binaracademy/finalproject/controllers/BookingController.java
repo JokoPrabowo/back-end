@@ -46,12 +46,12 @@ public class BookingController {
                 res.setData(null);
                 return ResponseEntity.badRequest().body(res);
             }
-            ContactGuestEntity contact = contactGuestService.create(new ContactGuestEntity(null, data.getFirstName(),
-                    data.getLastName(), data.getNoTelp(), data.getEmail(), null, null));
+            ContactGuestEntity contact = contactGuestService.create(new ContactGuestEntity(null, data.getGuestFirstname(),
+                    data.getGuestLastname(), data.getNoTelp(), data.getEmail(), null, null));
             res.setSuccess(true);
             res.setStatusCode(HttpStatus.CREATED.value());
             res.setMessage("Successfully!");
-            res.setData(guestService.create(new GuestEntity(null, data.getGuestFirstname(), data.getGuestLastname(), data.getBirthDate(),
+            res.setData(guestService.create(new GuestEntity(null, data.getFirstName(), data.getLastName(), data.getBirthDate(),
                     data.getNationality(), data.getCountry(), data.getPassport(), data.getEndPassport(), data.getGoogleId(),
                     data.getUserId(), contact.getId(), null, null, null, null)));
             return ResponseEntity.ok(res);
