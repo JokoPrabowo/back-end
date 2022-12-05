@@ -8,6 +8,7 @@ import org.binaracademy.finalproject.repositories.TicketRepo;
 import org.binaracademy.finalproject.services.TicketService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,8 +31,8 @@ public class TicketServiceImpl implements TicketService {
             List<TicketEntity> ticket = new ArrayList<>();
             orderTicketRequest.getSeatId().forEach(seat -> {
                 int index = orderTicketRequest.getSeatId().indexOf(seat);
-                ticket.add(ticketRepo.createOrderDetail(true, orderTicketRequest.getScheduleId(),
-                        seat, orderTicketRequest.getGuestId().get(index), orderId));
+                ticket.add(ticketRepo.save(new TicketEntity(null, true, orderTicketRequest.getScheduleId(),
+                        seat, orderTicketRequest.getGuestId().get(index), orderId, null, null, null, null, LocalDateTime.now(), null)));
             });
             log.info("Ticket has been created : {}", orderTicketRequest.getUserEmail());
             return ticket;
@@ -47,6 +48,7 @@ public class TicketServiceImpl implements TicketService {
             IntStream.range(0, orderTicketRequest.getSeatId().size()).forEach(x -> {
                 TicketEntity data = findByGuestId(orderTicketRequest.getGuestId().get(x));
                 data.setSeatId(orderTicketRequest.getSeatId().get(x));
+                data.setUpdateAt(LocalDateTime.now());
                 ticket.add(ticketRepo.save(data));
             });
             log.info("Ticket has been created : {}", orderTicketRequest.getUserEmail());

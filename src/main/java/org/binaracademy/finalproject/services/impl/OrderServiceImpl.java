@@ -28,9 +28,9 @@ public class OrderServiceImpl implements OrderService {
             BigDecimal tax = totalPrice.multiply(BigDecimal.valueOf(0.10));
             BigDecimal totalPay = totalPrice.add(tax);
             LocalDateTime expiredAt = LocalDateTime.now().plusHours(12L);
-            OrderEntity order = orderRepo.createOrder(true, totalPrice, tax, totalPay,
+            OrderEntity order = orderRepo.save(new OrderEntity(null, true, totalPrice, tax, totalPay,
                     expiredAt, orderTicketRequest.getUserEmail(),
-                    orderTicketRequest.getScheduleId(), LocalDateTime.now());
+                    orderTicketRequest.getScheduleId(), null, LocalDateTime.now(), null,null));
             log.info("Order has been created : {}", orderTicketRequest.getUserEmail());
             return order;
         }catch (Exception e){
