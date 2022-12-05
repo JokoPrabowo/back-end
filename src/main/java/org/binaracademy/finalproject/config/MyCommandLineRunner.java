@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.binaracademy.finalproject.data.CountryData;
 import org.binaracademy.finalproject.data.ScheduleTimeData;
+import org.binaracademy.finalproject.data.SeatData;
 import org.binaracademy.finalproject.data.TimeData;
 import org.binaracademy.finalproject.entity.*;
 import org.binaracademy.finalproject.repositories.RoleRepo;
@@ -16,6 +17,7 @@ import org.binaracademy.finalproject.services.ScheduleTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.binaracademy.finalproject.services.AirportService;
 import org.binaracademy.finalproject.services.PesawatService;
+import org.binaracademy.finalproject.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
@@ -51,6 +53,7 @@ public class MyCommandLineRunner implements CommandLineRunner {
 
     @Autowired
     private final RoleRepo roleRepo;
+    private final SeatService seatService;
 
 
     @Override
@@ -103,12 +106,24 @@ public class MyCommandLineRunner implements CommandLineRunner {
             }
         }
 
-        if(roleRepo.findAll().isEmpty()){
+        if(roleRepo.findAll().isEmpty()) {
             String[] roles = {"ROLE_ADMIN", "ROLE_USER"};
-            IntStream.range(0, roles.length).forEach(x ->{
+            IntStream.range(0, roles.length).forEach(x -> {
                 roleRepo.save(new RoleEntity(ERole.valueOf(roles[x])));
                 log.info("Role has been created : {}", roles[x]);
-                    });
+            });
+        }
+
+        if (seatService.getAll().isEmpty()){
+            ObjectMapper mapper = new ObjectMapper();
+            TypeReference<List<SeatData>> typeReference = new TypeReference<List<SeatData>>() {};
+            InputStream inputStream = TypeReference.class.getResourceAsStream("/data/seats.json");
+            try {
+                List<SeatData> seat = mapper.readValue(inputStream, typeReference);
+                seat.forEach(seatData -> seatService.create(new SeatEntity(null, seatData.getName())));
+            }catch (IOException e){
+                log.info("Unable to save country : {}", e.getMessage());
+            }
         }
     }
 
