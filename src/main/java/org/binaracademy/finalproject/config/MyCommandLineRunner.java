@@ -6,20 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.binaracademy.finalproject.data.CountryData;
 import org.binaracademy.finalproject.data.ScheduleTimeData;
+import org.binaracademy.finalproject.data.SeatData;
 import org.binaracademy.finalproject.data.TimeData;
-import org.binaracademy.finalproject.entity.CategoryClassEntity;
-import org.binaracademy.finalproject.entity.CityEntity;
-import org.binaracademy.finalproject.entity.CountryEntity;
-import org.binaracademy.finalproject.entity.ScheduleTimeEntity;
-import org.binaracademy.finalproject.services.CategoryClassService;
-import org.binaracademy.finalproject.services.CityService;
-import org.binaracademy.finalproject.services.CountryService;
-import org.binaracademy.finalproject.services.ScheduleTimeService;
+import org.binaracademy.finalproject.entity.*;
+import org.binaracademy.finalproject.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.binaracademy.finalproject.entity.AirportEntity;
-import org.binaracademy.finalproject.entity.PesawatEntity;
-import org.binaracademy.finalproject.services.AirportService;
-import org.binaracademy.finalproject.services.PesawatService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -50,6 +42,9 @@ public class MyCommandLineRunner implements CommandLineRunner {
 
     @Autowired
     private final PesawatService pesawatService;
+
+    @Autowired
+    private final SeatService seatService;
 
 
     @Override
@@ -98,6 +93,18 @@ public class MyCommandLineRunner implements CommandLineRunner {
             for(Integer i = 0 ; i<2 ; i++){
                 Long longI = Long.valueOf(i);
                 categoryService.create(new CategoryClassEntity(longI,ticketCategory[i],LocalDateTime.now(),null));
+            }
+        }
+
+        if (seatService.getAll().isEmpty()){
+            ObjectMapper mapper = new ObjectMapper();
+            TypeReference<List<SeatData>> typeReference = new TypeReference<List<SeatData>>() {};
+            InputStream inputStream = TypeReference.class.getResourceAsStream("/data/seats.json");
+            try {
+                List<SeatData> seat = mapper.readValue(inputStream, typeReference);
+                seat.forEach(seatData -> seatService.create(new SeatEntity(null, seatData.getName())));
+            }catch (IOException e){
+                log.info("Unable to save country : {}", e.getMessage());
             }
         }
     }
