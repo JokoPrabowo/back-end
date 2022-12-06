@@ -63,7 +63,7 @@ public class NotificationServiceImpl implements NotificationService {
     public List<NotificationEntity> getAllNotifByUserId(Long userId){
         try {
             List<NotificationEntity> notifications = notificationRepo.findByUserId(userId);
-            log.info("call getById notification succses");
+            log.info("call getAllNotifByUserId notification succses");
             return notifications;
         }catch (Exception e){
             log.error(ERROR_FOUND, e.getMessage());
