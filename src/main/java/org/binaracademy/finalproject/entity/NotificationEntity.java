@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +25,8 @@ public class NotificationEntity implements Serializable {
     private Long id;
     @Column(name = "content")
     private String content;
+    @Column(name = "status")
+    private Boolean status;
     @Column(name = "order_id")
     private Long orderId;
     @Column(name = "user_id")
@@ -34,5 +37,9 @@ public class NotificationEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
+    @Column(name = "create_at")
+    private LocalDateTime createAt;
+    @Column(name = "update_at")
+    private LocalDateTime updateAt;
 
 }
