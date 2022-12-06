@@ -8,14 +8,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.binaracademy.finalproject.dto.Request.GuestRequest;
 import org.binaracademy.finalproject.dto.Request.OrderTicketRequest;
+import org.binaracademy.finalproject.dto.Response.BookingResponse;
+import org.binaracademy.finalproject.dto.Response.NotificationResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
-import org.binaracademy.finalproject.entity.ContactGuestEntity;
-import org.binaracademy.finalproject.entity.GuestEntity;
-import org.binaracademy.finalproject.entity.TicketEntity;
-import org.binaracademy.finalproject.services.ContactGuestService;
-import org.binaracademy.finalproject.services.GuestService;
-import org.binaracademy.finalproject.services.OrderService;
-import org.binaracademy.finalproject.services.TicketService;
+import org.binaracademy.finalproject.entity.*;
+import org.binaracademy.finalproject.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,6 +39,8 @@ public class BookingController {
     private TicketService ticketService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private NotificationService notificationService;
 
     @Operation(summary = "Add guest")
     @ApiResponses(value = {
@@ -122,8 +121,8 @@ public class BookingController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ResponseData<List<TicketEntity>>> create(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
-        ResponseData<List<TicketEntity>> response = new ResponseData<>();
+    public ResponseEntity<ResponseData<BookingResponse>> create(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
+        ResponseData<BookingResponse> response = new ResponseData<>();
         try {
             if(errors.hasErrors()){
                 response.setData(null);
@@ -132,8 +131,21 @@ public class BookingController {
                 response.setMessage("Failed!");
                 return ResponseEntity.badRequest().body(response);
             }
-            orderService.create(orderTicketRequest);
-            response.setData(ticketService.create(orderTicketRequest));
+            OrderEntity order = orderService.create(orderTicketRequest);
+            List<TicketEntity> ticketEntities = ticketService.create(orderTicketRequest);
+            TicketEntity ticket = ticketEntities.get(0);
+            Long userId = ticketService.findByGuestId(ticket.getGuestId()).getGuest().getUser().getId();
+            NotificationEntity notification = notificationService.create(order.getId(), userId);
+            response.setData(BookingResponse.builder()
+                            .order(order)
+                            .notification(NotificationResponse.builder()
+                                    .id(notification.getId())
+                                    .content(notification.getContent())
+                                    .orderId(notification.getOrderId())
+                                    .userId(notification.getUserId())
+                                    .date(notification.getCreateAt())
+                                    .build())
+                            .build());
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage("Successfully!");

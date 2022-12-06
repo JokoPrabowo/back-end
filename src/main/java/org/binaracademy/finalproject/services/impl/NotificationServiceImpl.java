@@ -23,6 +23,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final OrderRepo orderRepo;
     private static final String ERROR_FOUND = "Error found : {}";
 
+    @Override
     public NotificationEntity create(Long orderId, Long userId){
         try {
             Optional<OrderEntity> orderOp = orderRepo.findById(orderId);
@@ -46,6 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    @Override
     public NotificationEntity getById(Long notifId){
         try {
             Optional<NotificationEntity> notification = notificationRepo.findById(notifId);
@@ -57,6 +59,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    @Override
     public List<NotificationEntity> getAllNotifByUserId(Long userId){
         try {
             List<NotificationEntity> notifications = notificationRepo.findByUserId(userId);
