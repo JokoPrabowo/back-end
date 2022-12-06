@@ -1,5 +1,11 @@
 package org.binaracademy.finalproject.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.binaracademy.finalproject.dto.Request.AirportRequest;
 import org.binaracademy.finalproject.dto.Response.AirportResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
@@ -7,6 +13,7 @@ import org.binaracademy.finalproject.entity.AirportEntity;
 import org.binaracademy.finalproject.services.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +24,51 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/airport")
+@Tag(name = "Airport", description = "Operation about Airport")
 public class AirportController {
     @Autowired
     AirportService airportService;
 
+    @Operation(summary = "Add Airport")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
+                    @ExampleObject(name = "Create Airport",
+                            description = "Menampilkan balikan dari create Airport",
+                            value = "{\n" +
+                                    "    \"success\": true,\n" +
+                                    "    \"statusCode\": 201,\n" +
+                                    "    \"message\": \"Successfully!\",\n" +
+                                    "    \"data\": {\n" +
+                                    "        \"id\": 23,\n" +
+                                    "        \"name\": \"Halim Airport\",\n" +
+                                    "        \"cityId\": 1,\n" +
+                                    "        \"createAt\": \"2022-12-06T10:26:28.4931181\",\n" +
+                                    "        \"updateAt\": null,\n" +
+                                    "        \"city\": null\n" +
+                                    "    }\n" +
+                                    "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400", content = @Content(examples = {
+                    @ExampleObject(name = "Request Error",
+                            description = "Tampilan jika request error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 400,\n"
+                                    + "    \"message\": \"Request Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "500", content = @Content(examples = {
+                    @ExampleObject(name = "Server Error",
+                            description = "Tampilan jika server error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 500,\n"
+                                    + "    \"message\": \"Server Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
     @PostMapping("/add")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody AirportRequest data, Errors errors){
         try {
@@ -47,6 +95,58 @@ public class AirportController {
         }
     }
 
+    @Operation(summary = "Update Airport")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
+                    @ExampleObject(name = "Update Airport",
+                            description = "Menampilkan balikan dari update Airport",
+                            value = "{\n" +
+                                    "    \"success\": true,\n" +
+                                    "    \"statusCode\": 201,\n" +
+                                    "    \"message\": \"Successfully!\",\n" +
+                                    "    \"data\": {\n" +
+                                    "        \"id\": 23,\n" +
+                                    "        \"name\": \"Bandar Udara Halim Perdanakusuma\",\n" +
+                                    "        \"cityId\": 1,\n" +
+                                    "        \"createAt\": \"2022-12-06T10:29:28.174699\",\n" +
+                                    "        \"updateAt\": \"2022-12-06T10:31:52.0424716\",\n" +
+                                    "        \"city\": {\n" +
+                                    "            \"id\": 1,\n" +
+                                    "            \"name\": \"Jakarta\",\n" +
+                                    "            \"createAt\": \"2022-12-06T10:29:19.12533\",\n" +
+                                    "            \"updateAt\": null,\n" +
+                                    "            \"countryId\": 1,\n" +
+                                    "            \"country\": {\n" +
+                                    "                \"id\": 1,\n" +
+                                    "                \"name\": \"Indonesia\",\n" +
+                                    "                \"createAt\": \"2022/12/06 10:29:19\",\n" +
+                                    "                \"updateAt\": null\n" +
+                                    "            }\n" +
+                                    "        }\n" +
+                                    "    }\n" +
+                                    "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400", content = @Content(examples = {
+                    @ExampleObject(name = "Request Error",
+                            description = "Tampilan jika request error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 400,\n"
+                                    + "    \"message\": \"Request Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "500", content = @Content(examples = {
+                    @ExampleObject(name = "Server Error",
+                            description = "Tampilan jika server error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 500,\n"
+                                    + "    \"message\": \"Server Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseData<Object>> update(@PathVariable("id") Long id, @Valid @RequestBody AirportRequest data, Errors errors){
         ResponseData<Object> res = new ResponseData<>();
@@ -72,6 +172,60 @@ public class AirportController {
         }
     }
 
+    @Operation(summary = "Get all Airport")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
+                    @ExampleObject(name = "List Airport",
+                            description = "Menampilkan semua Airport yang ada dalam database",
+                            value = "{\n" +
+                                    "    \"success\": true,\n" +
+                                    "    \"statusCode\": 202,\n" +
+                                    "    \"message\": \"Successfully!\",\n" +
+                                    "    \"data\": [\n" +
+                                    "        {\n" +
+                                    "            \"id\": 1,\n" +
+                                    "            \"airportName\": \"Soekarno-Hatta International Airport\",\n" +
+                                    "            \"cityName\": \"Jakarta\"\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "            \"id\": 2,\n" +
+                                    "            \"airportName\": \"Ngurah Rai International Airport\",\n" +
+                                    "            \"cityName\": \"Bali (Denpasar)\"\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "            \"id\": 3,\n" +
+                                    "            \"airportName\": \"Sydney Airport\",\n" +
+                                    "            \"cityName\": \"Sydney\"\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "            \"id\": 4,\n" +
+                                    "            \"airportName\": \"Melbourne Airport\",\n" +
+                                    "            \"cityName\": \"Melbourne\"\n" +
+                                    "        }\n" +
+                                    "    ]\n" +
+                                    "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400", content = @Content(examples = {
+                    @ExampleObject(name = "Request Error",
+                            description = "Tampilan jika request error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 400,\n"
+                                    + "    \"message\": \"Request Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "500", content = @Content(examples = {
+                    @ExampleObject(name = "Server Error",
+                            description = "Tampilan jika server error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 500,\n"
+                                    + "    \"message\": \"Server Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
     @GetMapping("/getAirports")
     public ResponseEntity<ResponseData<List<AirportResponse>>> getAll(){
         ResponseData<List<AirportResponse>> res = new ResponseData<>();
@@ -96,6 +250,43 @@ public class AirportController {
         }
     }
 
+    @Operation(summary = "Get Airport By Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
+                    @ExampleObject(name = "Airport By Id",
+                            description = "Menampilkan Airport sesuai id dalam database",
+                            value = "{\n" +
+                                    "    \"success\": true,\n" +
+                                    "    \"statusCode\": 202,\n" +
+                                    "    \"message\": \"Successfully!\",\n" +
+                                    "    \"data\": {\n" +
+                                    "        \"id\": 1,\n" +
+                                    "        \"airportName\": \"Soekarno-Hatta International Airport\",\n" +
+                                    "        \"cityName\": \"Jakarta\"\n" +
+                                    "    }\n" +
+                                    "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400", content = @Content(examples = {
+                    @ExampleObject(name = "Request Error",
+                            description = "Tampilan jika request error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 400,\n"
+                                    + "    \"message\": \"Request Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "500", content = @Content(examples = {
+                    @ExampleObject(name = "Server Error",
+                            description = "Tampilan jika server error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 500,\n"
+                                    + "    \"message\": \"Server Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
     @GetMapping("/getAirport/{id}")
     public ResponseEntity<ResponseData<Object>> getOne(@PathVariable("id") Long id){
         ResponseData<Object> res = new ResponseData<>();
@@ -120,6 +311,39 @@ public class AirportController {
         }
     }
 
+    @Operation(summary = "Delete Airport By Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
+                    @ExampleObject(name = "Delete Airport By Id",
+                            description = "Menghapus Airport sesuai id dalam database",
+                            value = "{\n" +
+                                    "    \"success\": true,\n" +
+                                    "    \"statusCode\": 202,\n" +
+                                    "    \"message\": \"Successfully!\",\n" +
+                                    "    \"data\": 1\n" +
+                                    "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400", content = @Content(examples = {
+                    @ExampleObject(name = "Request Error",
+                            description = "Tampilan jika request error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 400,\n"
+                                    + "    \"message\": \"Request Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "500", content = @Content(examples = {
+                    @ExampleObject(name = "Server Error",
+                            description = "Tampilan jika server error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 500,\n"
+                                    + "    \"message\": \"Server Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseData<Integer>> delete(@PathVariable("id") Long id){
         ResponseData<Integer> res = new ResponseData<>();

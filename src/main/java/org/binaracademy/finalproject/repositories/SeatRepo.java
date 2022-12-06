@@ -10,12 +10,11 @@ import java.util.List;
 @Repository
 public interface SeatRepo extends JpaRepository<SeatEntity, Long> {
 
-    @Query(
-            value = "SELECT * " +
+    @Query(value = "SELECT * " +
                     "FROM seats s " +
                     "WHERE NOT EXISTS " +
                     "(SELECT * FROM ticket t " +
-                    "WHERE t.seat_id=s.seat_id AND t.schedule_Id=:scheduleId)", nativeQuery = true)
+                    "WHERE t.seat_id=s.seat_id AND t.schedule_id=:scheduleId)", nativeQuery = true)
     List<SeatEntity> findSeatAvailable(Long scheduleId);
 
 }
