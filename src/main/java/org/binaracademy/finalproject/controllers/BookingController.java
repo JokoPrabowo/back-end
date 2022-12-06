@@ -1,5 +1,11 @@
 package org.binaracademy.finalproject.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.binaracademy.finalproject.dto.Request.GuestRequest;
 import org.binaracademy.finalproject.dto.Request.OrderTicketRequest;
 import org.binaracademy.finalproject.dto.ResponseData;
@@ -12,6 +18,7 @@ import org.binaracademy.finalproject.services.OrderService;
 import org.binaracademy.finalproject.services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +31,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/booking")
+@Tag(name = "Booking", description = "Operation about Booking")
 public class BookingController {
     @Autowired
     private GuestService guestService;
@@ -35,6 +43,55 @@ public class BookingController {
     @Autowired
     private OrderService orderService;
 
+    @Operation(summary = "Add guest")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
+                    @ExampleObject(name = "Create guest",
+                            description = "Menampilkan balikan dari create guest",
+                            value = "{\n" +
+                                    "    \"success\": true,\n" +
+                                    "    \"statusCode\": 201,\n" +
+                                    "    \"message\": \"Successfully!\",\n" +
+                                    "    \"data\": {\n" +
+                                    "        \"id\": 1,\n" +
+                                    "        \"firstName\": \"Adinda\",\n" +
+                                    "        \"lastName\": \"Anzani\",\n" +
+                                    "        \"birthDate\": \"1998-04-06\",\n" +
+                                    "        \"nationality\": \"Indonesia\",\n" +
+                                    "        \"country\": \"Indonesia\",\n" +
+                                    "        \"passport\": \"A8989888\",\n" +
+                                    "        \"endPassport\": \"2025-12-06\",\n" +
+                                    "        \"googleId\": \"1i1iu1i1iu\",\n" +
+                                    "        \"userId\": 1,\n" +
+                                    "        \"contactId\": 1,\n" +
+                                    "        \"user\": null,\n" +
+                                    "        \"contact\": null,\n" +
+                                    "        \"createAt\": \"2022-12-06T10:51:44.1881502\",\n" +
+                                    "        \"updateAt\": null\n" +
+                                    "    }\n" +
+                                    "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400", content = @Content(examples = {
+                    @ExampleObject(name = "Request Error",
+                            description = "Tampilan jika request error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 400,\n"
+                                    + "    \"message\": \"Request Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "500", content = @Content(examples = {
+                    @ExampleObject(name = "Server Error",
+                            description = "Tampilan jika server error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 500,\n"
+                                    + "    \"message\": \"Server Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
     @PostMapping("/guest")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody GuestRequest data, Errors errors){
         ResponseData<Object> res = new ResponseData();
