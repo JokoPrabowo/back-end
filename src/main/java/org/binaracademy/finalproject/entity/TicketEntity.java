@@ -1,5 +1,6 @@
 package org.binaracademy.finalproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,15 +33,19 @@ public class TicketEntity {
     private Long guestId;
     @Column(name = "order_id")
     private Long orderId;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "schedule_id", insertable = false, updatable = false)
     private ScheduleEntity schedule;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "seat_id", insertable = false, updatable = false)
     private SeatEntity seat;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "guest_id", insertable = false, updatable = false)
     private GuestEntity guest;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", insertable = false, updatable = false, referencedColumnName = "order_id")
     private OrderEntity order;

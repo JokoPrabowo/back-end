@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -23,7 +24,22 @@ public class GuestServiceImpl implements GuestService {
             sample.setCreateAt(LocalDateTime.now());
             return guestRepo.save(sample);
         }catch (Exception e){
-            log.error("Error found {}", e);
+            log.error("Error found {}", e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public GuestEntity getById(Long guestId) {
+        try{
+            Optional<GuestEntity> guest = guestRepo.findById(guestId);
+            if (guest.isEmpty()) {
+                return null;
+            }
+            log.info("call getById guest success");
+            return guest.get();
+        }catch (Exception e){
+            log.error("Error found {}", e.getMessage());
             return null;
         }
     }

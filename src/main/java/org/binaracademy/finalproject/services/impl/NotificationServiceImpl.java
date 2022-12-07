@@ -6,6 +6,7 @@ import org.binaracademy.finalproject.entity.NotificationEntity;
 import org.binaracademy.finalproject.entity.OrderEntity;
 import org.binaracademy.finalproject.repositories.NotificationRepo;
 import org.binaracademy.finalproject.repositories.OrderRepo;
+import org.binaracademy.finalproject.repositories.TicketRepo;
 import org.binaracademy.finalproject.services.NotificationService;
 import org.springframework.stereotype.Service;
 
@@ -21,22 +22,28 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepo notificationRepo;
     private final OrderRepo orderRepo;
+    private final TicketRepo ticketRepo;
     private static final String ERROR_FOUND = "Error found : {}";
 
     @Override
-    public NotificationEntity create(Long orderId, Long userId){
+    public NotificationEntity create(Long orderId){
         try {
             Optional<OrderEntity> orderOp = orderRepo.findById(orderId);
             if (orderOp.isEmpty()) {
                 log.warn("Order empty in method create notification");
                 throw new IllegalStateException("Order tidak ada");
             }
+            List<Long> userId1 = notificationRepo.findUserId(orderId);
+            if (userId1.isEmpty()){
+                log.warn("UserId kosong dalam relasi ticket ke guest");
+                throw new IllegalStateException("Tidak ada ticket dari user");
+            }
             OrderEntity order = orderOp.get();
             String departure = order.getTicket().get(0).getSchedule().getDepartureAiport();
             String arrival = order.getTicket().get(0).getSchedule().getArrivalAirport();
             String content = "Anda berhasil melakukan order penerbangan "+departure+" - "+arrival;
             NotificationEntity entity = new NotificationEntity(
-                    null, content, true, orderId, userId, null, null, LocalDateTime.now(), null);
+                    null, content, true, orderId, userId1.get(0), null, null, LocalDateTime.now(), null);
             Long notifId = notificationRepo.save(entity).getId();
             Optional<NotificationEntity> notification = notificationRepo.findById(notifId);
             log.info("call create notification succses");

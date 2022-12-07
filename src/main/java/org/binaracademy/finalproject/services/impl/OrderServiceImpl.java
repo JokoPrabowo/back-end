@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -38,4 +39,21 @@ public class OrderServiceImpl implements OrderService {
             return null;
         }
     }
+
+    @Override
+    public OrderEntity getById(Long orderId) {
+        try {
+            Optional<OrderEntity> order = orderRepo.findById(orderId);
+            if (order.isEmpty()) {
+                return null;
+            }
+            log.info("call getById order sucses : {}", order.get().getUserEmail());
+            return order.get();
+        }catch (Exception e){
+            log.error(ERROR_FOUND, e.getMessage());
+            return null;
+        }
+    }
+
+
 }

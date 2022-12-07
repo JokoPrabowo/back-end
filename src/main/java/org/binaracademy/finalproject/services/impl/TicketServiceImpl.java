@@ -66,4 +66,19 @@ public class TicketServiceImpl implements TicketService {
         }
         return data.get();
     }
+
+    @Override
+    public TicketEntity getById(Long ticketId) {
+        try{
+            Optional<TicketEntity> ticket = ticketRepo.findById(ticketId);
+            if (ticket.isEmpty()) {
+                return null;
+            }
+            log.info("call getById ticket : {}", ticket.get().getId());
+            return ticket.get();
+        }catch (Exception e){
+            log.error(ERROR_FOUND, e.getMessage());
+            return null;
+        }
+    }
 }
