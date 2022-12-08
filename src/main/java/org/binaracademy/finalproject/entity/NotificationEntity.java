@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,40 +16,30 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "ticket")
+@Table(name = "notifs")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class TicketEntity {
+public class NotificationEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ticket_id")
+    @Column(name = "notif_id")
     private Long id;
+    @Column(name = "content")
+    private String content;
     @Column(name = "status")
     private Boolean status;
-    @Column(name = "schedule_id")
-    private Long scheduleId;
-    @Column(name = "seat_id")
-    private Long seatId;
-    @Column(name = "guest_id")
-    private Long guestId;
     @Column(name = "order_id")
     private Long orderId;
+    @Column(name = "user_id")
+    private Long userId;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "schedule_id", insertable = false, updatable = false)
-    private ScheduleEntity schedule;
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "seat_id", insertable = false, updatable = false)
-    private SeatEntity seat;
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "guest_id", insertable = false, updatable = false)
-    private GuestEntity guest;
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id", insertable = false, updatable = false, referencedColumnName = "order_id")
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
     private OrderEntity order;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private UserEntity user;
     @Column(name = "create_at")
     private LocalDateTime createAt;
     @Column(name = "update_at")
