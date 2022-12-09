@@ -7,33 +7,34 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.binaracademy.finalproject.dto.Request.OrderTicketRequest;
+import org.binaracademy.finalproject.dto.Response.NotificationResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
-import org.binaracademy.finalproject.entity.OrderEntity;
-import org.binaracademy.finalproject.entity.TicketEntity;
-import org.binaracademy.finalproject.services.OrderService;
-import org.binaracademy.finalproject.services.TicketService;
+import org.binaracademy.finalproject.entity.NotificationEntity;
+import org.binaracademy.finalproject.services.NotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ticket")
+@RequestMapping("/api")
 @RequiredArgsConstructor
-@Tag(name = "Ticket", description = "Operation about Ticket")
-public class TicketController {
-    private final TicketService ticketService;
+@Tag(name = "Notification", description = "Operation about Notification")
+public class NotificationController {
 
-    @Operation(summary = "Update ticket")
+    private final NotificationService notificationService;
+
+    @Operation(summary = "Get all notif user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
-                    @ExampleObject(name = "Update ticket",
-                            description = "Balikan hasil dari merubah tempat duduk ticket",
+                    @ExampleObject(name = "Get Notif user",
+                            description = "Menampilkan semua notif milik user",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +
@@ -41,13 +42,10 @@ public class TicketController {
                                     "    \"data\": [\n" +
                                     "        {\n" +
                                     "            \"id\": 1,\n" +
-                                    "            \"status\": true,\n" +
-                                    "            \"scheduleId\": 1,\n" +
-                                    "            \"seatId\": 3,\n" +
-                                    "            \"guestId\": 1,\n" +
+                                    "            \"content\": \"Anda berhasil melakukan order penerbangan Jakarta - Bali\",\n" +
                                     "            \"orderId\": 1,\n" +
-                                    "            \"createAt\": \"2022-12-07T12:56:40.117827\",\n" +
-                                    "            \"updateAt\": \"2022-12-07T13:35:16.6613937\"\n" +
+                                    "            \"userId\": 1,\n" +
+                                    "            \"date\": \"2022-12-07T12:56:40.444513\"\n" +
                                     "        }\n" +
                                     "    ]\n" +
                                     "}")
@@ -73,48 +71,50 @@ public class TicketController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    @PutMapping("/update")
-    public ResponseEntity<ResponseData<List<TicketEntity>>> update(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
-        ResponseData<List<TicketEntity>> response = new ResponseData<>();
+    @GetMapping("/notification/{userId}")
+    public ResponseEntity<ResponseData<List<NotificationResponse>>> getNotification(@PathVariable("userId") Long userId){
+        ResponseData<List<NotificationResponse>> response = new ResponseData<>();
         try {
-            if(errors.hasErrors()){
-                response.setData(null);
-                response.setSuccess(false);
-                response.setStatusCode(HttpStatus.BAD_REQUEST.value());
-                response.setMessage("Failed!");
-                return ResponseEntity.badRequest().body(response);
-            }
-            response.setData(ticketService.update(orderTicketRequest));
+            List<NotificationResponse> notifications = new ArrayList<>();
+            notificationService.getAllNotifByUserId(userId).forEach(s -> {
+                notifications.add(NotificationResponse.builder()
+                        .id(s.getId())
+                        .content(s.getContent())
+                        .orderId(s.getOrderId())
+                        .userId(s.getUserId())
+                        .date(s.getCreateAt())
+                        .build());
+            });
+            response.setData(notifications);
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage("Successfully!");
             return ResponseEntity.ok(response);
         }catch (Exception e){
-            response.setData(null);
             response.setSuccess(false);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setMessage(e.getMessage());
+            response.setData(null);
             return ResponseEntity.internalServerError().body(response);
         }
     }
 
-    @Operation(summary = "Get ticket")
+    @Operation(summary = "Get notif")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
-                    @ExampleObject(name = "Get ticket By Id",
-                            description = "Menampilkan ticket berdasarkan guest",
+                    @ExampleObject(name = "Get Notif By Id",
+                            description = "Menampilkan Notif berdasarkan Id",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +
                                     "    \"message\": \"Successfully!\",\n" +
                                     "    \"data\": {\n" +
                                     "        \"id\": 1,\n" +
+                                    "        \"content\": \"Anda berhasil melakukan order penerbangan Jakarta - Bali\",\n" +
                                     "        \"status\": true,\n" +
-                                    "        \"scheduleId\": 1,\n" +
-                                    "        \"seatId\": 1,\n" +
-                                    "        \"guestId\": 1,\n" +
                                     "        \"orderId\": 1,\n" +
-                                    "        \"createAt\": \"2022-12-07T12:56:40.117827\",\n" +
+                                    "        \"userId\": 1,\n" +
+                                    "        \"createAt\": \"2022-12-07T12:56:40.444513\",\n" +
                                     "        \"updateAt\": null\n" +
                                     "    }\n" +
                                     "}")
@@ -140,21 +140,23 @@ public class TicketController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    @GetMapping("/get/{guestId}")
-    public ResponseEntity<ResponseData<TicketEntity>> findByGuestId(@PathVariable Long guestId){
-        ResponseData<TicketEntity> response = new ResponseData<>();
+    @GetMapping("/getNotification/{notifId}")
+    public ResponseEntity<ResponseData<NotificationEntity>> getOneNotification(@PathVariable("notifId") Long notifId){
+        ResponseData<NotificationEntity> response = new ResponseData<>();
         try {
-            response.setData(ticketService.findByGuestId(guestId));
+            NotificationEntity notifications = notificationService.getById(notifId);
+            response.setData(notifications);
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage("Successfully!");
             return ResponseEntity.ok(response);
         }catch (Exception e){
-            response.setData(null);
             response.setSuccess(false);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setMessage(e.getMessage());
+            response.setData(null);
             return ResponseEntity.internalServerError().body(response);
         }
     }
+
 }

@@ -8,14 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.binaracademy.finalproject.dto.Request.GuestRequest;
 import org.binaracademy.finalproject.dto.Request.OrderTicketRequest;
+import org.binaracademy.finalproject.dto.Response.BookingResponse;
+import org.binaracademy.finalproject.dto.Response.NotificationResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
-import org.binaracademy.finalproject.entity.ContactGuestEntity;
-import org.binaracademy.finalproject.entity.GuestEntity;
-import org.binaracademy.finalproject.entity.TicketEntity;
-import org.binaracademy.finalproject.services.ContactGuestService;
-import org.binaracademy.finalproject.services.GuestService;
-import org.binaracademy.finalproject.services.OrderService;
-import org.binaracademy.finalproject.services.TicketService;
+import org.binaracademy.finalproject.entity.*;
+import org.binaracademy.finalproject.helper.utility.ErrorParsingUtility;
+import org.binaracademy.finalproject.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,6 +40,10 @@ public class BookingController {
     private TicketService ticketService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Operation(summary = "Add guest")
     @ApiResponses(value = {
@@ -99,7 +101,7 @@ public class BookingController {
             if(errors.hasErrors()){
                 res.setSuccess(false);
                 res.setStatusCode(HttpStatus.BAD_REQUEST.value());
-                res.setMessage("Failed!");
+                res.setMessage(ErrorParsingUtility.parse(errors).toString());
                 res.setData(null);
                 return ResponseEntity.badRequest().body(res);
             }
@@ -121,19 +123,192 @@ public class BookingController {
         }
     }
 
+    @Operation(summary = "Add Order")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
+                    @ExampleObject(name = "Create Order and ticket",
+                            description = "Menampilkan balikan dari create Order",
+                            value = "{\n" +
+                                    "    \"success\": true,\n" +
+                                    "    \"statusCode\": 200,\n" +
+                                    "    \"message\": \"Successfully!\",\n" +
+                                    "    \"data\": {\n" +
+                                    "        \"order\": {\n" +
+                                    "            \"id\": 1,\n" +
+                                    "            \"status\": true,\n" +
+                                    "            \"totalPrice\": 750000.00,\n" +
+                                    "            \"tax\": 75000.000,\n" +
+                                    "            \"totalPay\": 825000.000,\n" +
+                                    "            \"expiredAt\": \"2022-12-07T12:13:26.9916063\",\n" +
+                                    "            \"userEmail\": \"budi@gmail.com\",\n" +
+                                    "            \"scheduleId\": 1,\n" +
+                                    "            \"schedule\": null,\n" +
+                                    "            \"createAt\": \"2022-12-07T00:13:26.9916063\",\n" +
+                                    "            \"updateAt\": null,\n" +
+                                    "            \"ticket\": [\n" +
+                                    "                {\n" +
+                                    "                    \"id\": 1,\n" +
+                                    "                    \"status\": true,\n" +
+                                    "                    \"scheduleId\": 1,\n" +
+                                    "                    \"seatId\": 1,\n" +
+                                    "                    \"guestId\": 1,\n" +
+                                    "                    \"orderId\": 1,\n" +
+                                    "                    \"schedule\": {\n" +
+                                    "                        \"id\": 1,\n" +
+                                    "                        \"departureAiport\": \"Jakarta\",\n" +
+                                    "                        \"arrivalAirport\": \"Bali\",\n" +
+                                    "                        \"price\": 750000.00,\n" +
+                                    "                        \"maxSeat\": 1000,\n" +
+                                    "                        \"date\": \"2022-12-12\",\n" +
+                                    "                        \"scheduleTimeId\": 1,\n" +
+                                    "                        \"categoryClassId\": 1,\n" +
+                                    "                        \"pesawatId\": 1,\n" +
+                                    "                        \"scheduleTime\": {\n" +
+                                    "                            \"id\": 1,\n" +
+                                    "                            \"day\": \"sunday\",\n" +
+                                    "                            \"depatureTime\": \"10:00:00\",\n" +
+                                    "                            \"arrivalTime\": \"12:00:00\",\n" +
+                                    "                            \"createAt\": \"2022-12-07T00:11:51.009746\",\n" +
+                                    "                            \"updateAt\": null\n" +
+                                    "                        },\n" +
+                                    "                        \"categoryClass\": {\n" +
+                                    "                            \"id\": 1,\n" +
+                                    "                            \"name\": \"Bussiness\",\n" +
+                                    "                            \"createAt\": \"2022-12-07T00:11:51.259727\",\n" +
+                                    "                            \"updateAt\": null\n" +
+                                    "                        },\n" +
+                                    "                        \"pesawat\": {\n" +
+                                    "                            \"id\": 1,\n" +
+                                    "                            \"name\": \"Airbus A330-200\",\n" +
+                                    "                            \"airportId\": 1,\n" +
+                                    "                            \"airport\": {\n" +
+                                    "                                \"id\": 1,\n" +
+                                    "                                \"name\": \"Soekarno-Hatta International Airport\",\n" +
+                                    "                                \"cityId\": 1,\n" +
+                                    "                                \"createAt\": \"2022-12-07T00:11:49.707284\",\n" +
+                                    "                                \"updateAt\": null,\n" +
+                                    "                                \"city\": {\n" +
+                                    "                                    \"id\": 1,\n" +
+                                    "                                    \"name\": \"Jakarta\",\n" +
+                                    "                                    \"createAt\": \"2022-12-07T00:11:49.66041\",\n" +
+                                    "                                    \"updateAt\": null,\n" +
+                                    "                                    \"countryId\": 1,\n" +
+                                    "                                    \"country\": {\n" +
+                                    "                                        \"id\": 1,\n" +
+                                    "                                        \"name\": \"Indonesia\",\n" +
+                                    "                                        \"createAt\": \"2022/12/07 00:11:48\",\n" +
+                                    "                                        \"updateAt\": null\n" +
+                                    "                                    }\n" +
+                                    "                                }\n" +
+                                    "                            },\n" +
+                                    "                            \"createAt\": \"2022-12-07T00:11:49.72291\",\n" +
+                                    "                            \"updateAt\": null\n" +
+                                    "                        },\n" +
+                                    "                        \"createAt\": \"2022-12-07T00:13:17.285517\",\n" +
+                                    "                        \"updateAt\": null\n" +
+                                    "                    },\n" +
+                                    "                    \"seat\": null,\n" +
+                                    "                    \"guest\": {\n" +
+                                    "                        \"id\": 1,\n" +
+                                    "                        \"firstName\": \"Adinda\",\n" +
+                                    "                        \"lastName\": \"Anzani\",\n" +
+                                    "                        \"birthDate\": \"1998-04-06\",\n" +
+                                    "                        \"nationality\": \"Indonesia\",\n" +
+                                    "                        \"country\": \"Indonesia\",\n" +
+                                    "                        \"passport\": \"A8989888\",\n" +
+                                    "                        \"endPassport\": \"2025-12-06\",\n" +
+                                    "                        \"googleId\": \"1i1iu1i1iu\",\n" +
+                                    "                        \"userId\": 1,\n" +
+                                    "                        \"contactId\": 1,\n" +
+                                    "                        \"user\": {\n" +
+                                    "                            \"id\": 1,\n" +
+                                    "                            \"username\": \"budi123\",\n" +
+                                    "                            \"email\": \"budi@gmail.com\",\n" +
+                                    "                            \"password\": \"1234\",\n" +
+                                    "                            \"profile\": \"ytt\",\n" +
+                                    "                            \"createAt\": \"2022-12-06T00:00:00\",\n" +
+                                    "                            \"updateAt\": null,\n" +
+                                    "                            \"roles\": []\n" +
+                                    "                        },\n" +
+                                    "                        \"contact\": {\n" +
+                                    "                            \"id\": 1,\n" +
+                                    "                            \"firstName\": \"Adinda\",\n" +
+                                    "                            \"lastName\": \"Anzani\",\n" +
+                                    "                            \"noTelp\": \"08162716176\",\n" +
+                                    "                            \"email\": \"adindaanz@gamil.com\",\n" +
+                                    "                            \"createAt\": \"2022-12-07T00:13:03.024304\",\n" +
+                                    "                            \"updateAt\": null\n" +
+                                    "                        },\n" +
+                                    "                        \"createAt\": \"2022-12-07T00:13:03.045285\",\n" +
+                                    "                        \"updateAt\": null\n" +
+                                    "                    },\n" +
+                                    "                    \"order\": null,\n" +
+                                    "                    \"createAt\": \"2022-12-07T00:13:27.1370439\",\n" +
+                                    "                    \"updateAt\": null\n" +
+                                    "                }\n" +
+                                    "            ]\n" +
+                                    "        },\n" +
+                                    "        \"notification\": {\n" +
+                                    "            \"id\": 1,\n" +
+                                    "            \"content\": \"Anda berhasil melakukan order penerbangan Jakarta - Bali\",\n" +
+                                    "            \"orderId\": 1,\n" +
+                                    "            \"userId\": 1,\n" +
+                                    "            \"date\": \"2022-12-07T00:13:27.515114\"\n" +
+                                    "        }\n" +
+                                    "    }\n" +
+                                    "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "400", content = @Content(examples = {
+                    @ExampleObject(name = "Request Error",
+                            description = "Tampilan jika request error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 400,\n"
+                                    + "    \"message\": \"Request Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "500", content = @Content(examples = {
+                    @ExampleObject(name = "Server Error",
+                            description = "Tampilan jika server error",
+                            value = "{\n"
+                                    + "    \"success\": false,\n"
+                                    + "    \"statusCode\": 500,\n"
+                                    + "    \"message\": \"Server Error Message\",\n"
+                                    + "    \"data\": []\n"
+                                    + "}")
+            }, mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
     @PostMapping("/add")
-    public ResponseEntity<ResponseData<List<TicketEntity>>> create(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
-        ResponseData<List<TicketEntity>> response = new ResponseData<>();
+    public ResponseEntity<ResponseData<BookingResponse>> create(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
+        ResponseData<BookingResponse> response = new ResponseData<>();
         try {
             if(errors.hasErrors()){
                 response.setData(null);
                 response.setSuccess(false);
                 response.setStatusCode(HttpStatus.BAD_REQUEST.value());
-                response.setMessage("Failed!");
+                response.setMessage(ErrorParsingUtility.parse(errors).toString());
                 return ResponseEntity.badRequest().body(response);
             }
-            orderService.create(orderTicketRequest);
-            response.setData(ticketService.create(orderTicketRequest));
+            OrderEntity order = orderService.create(orderTicketRequest);
+            List<TicketEntity> ticketEntities = ticketService.create(orderTicketRequest);
+            ticketEntities.forEach(ticket -> {
+                ticket.setSchedule(scheduleService.getOneSchedule(ticket.getScheduleId()));
+                ticket.setGuest(guestService.getById(ticket.getGuestId()));
+            });
+            order.setTicket(ticketEntities);
+            NotificationEntity notification = notificationService.create(order.getId());
+
+            response.setData(BookingResponse.builder()
+                    .order(order)
+                    .notification(NotificationResponse.builder()
+                            .id(notification.getId())
+                            .content(notification.getContent())
+                            .orderId(notification.getOrderId())
+                            .userId(notification.getUserId())
+                            .date(notification.getCreateAt())
+                            .build())
+                    .build());
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage("Successfully!");

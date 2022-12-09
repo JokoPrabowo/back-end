@@ -11,5 +11,6 @@ public interface TicketService {
 
     List<TicketEntity> update(OrderTicketRequest orderTicketRequest);
     TicketEntity findByGuestId(Long guestId);
+    TicketEntity getById(Long ticketId);
 
 }
