@@ -22,7 +22,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@EnableWebMvc
 @EnableGlobalMethodSecurity(
         prePostEnabled = true)
 public class WebSecurityConfig implements WebMvcConfigurer{
@@ -45,11 +44,6 @@ public class WebSecurityConfig implements WebMvcConfigurer{
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedMethods("*");
     }
 
     @Bean
