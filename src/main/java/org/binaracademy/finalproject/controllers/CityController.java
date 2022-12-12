@@ -43,12 +43,12 @@ public class CityController {
                                     + "        {\n"
                                     + "            \"id\": 1,\n"
                                     + "            \"cityName\": \"Jakarta\",\n"
-                                    + "            \"countryName\": \"Indonesia\"\n"
+//                                    + "            \"countryName\": \"Indonesia\"\n"
                                     + "        },\n"
                                     + "        {\n"
                                     + "            \"id\": 2,\n"
                                     + "            \"cityName\": \"Bali\",\n"
-                                    + "            \"countryName\": \"Indonesia\"\n"
+//                                    + "            \"countryName\": \"Indonesia\"\n"
                                     + "        }\n"
                                     + "    ]\n"
                                     + "}")
@@ -84,8 +84,7 @@ public class CityController {
             cityService.getCity(countryId).forEach(city
                     -> cityResponses.add(CityResponse.builder()
                     .id(city.getId())
-                    .cityName(city.getName())
-                    .countryName(city.getCountry().getName()).build()));
+                    .cityName(city.getName()).build()));
 
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());

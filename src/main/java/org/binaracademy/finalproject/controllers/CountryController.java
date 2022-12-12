@@ -7,8 +7,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.binaracademy.finalproject.dto.Response.CityResponse;
 import org.binaracademy.finalproject.dto.Response.CountryResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
+import org.binaracademy.finalproject.entity.CityEntity;
+import org.binaracademy.finalproject.services.CityService;
 import org.binaracademy.finalproject.services.CountryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +31,8 @@ public class CountryController {
 
     private final CountryService countryService;
 
+    private final CityService cityService;
+
     @Operation(summary = "Get all country (EndPoint digunakan untuk mendapatkan semua country \"https://febe6.up.railway.app/api/getCountry\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
@@ -42,10 +47,30 @@ public class CountryController {
                                     + "        {\n"
                                     + "            \"id\": 1,\n"
                                     + "            \"countryName\": \"Indonesia\"\n"
+                                    + "            \"city\": [\n"
+                                    + "                 {\n"
+                                    + "                       \"id\": 1,\n"
+                                    + "                       \"cityName\": \"Jakarta\",\n"
+                                    + "                  },\n"
+                                    + "                  {\n"
+                                    + "                       \"id\": 2,\n"
+                                    + "                      \"cityName\": \"Bali\",\n"
+                                    + "                 }\n"
+                                    + "              ]\n"
                                     + "        },\n"
                                     + "        {\n"
                                     + "            \"id\": 2,\n"
                                     + "            \"countryName\": \"Australia\"\n"
+                                    + "            \"city\": [\n"
+                                    + "                 {\n"
+                                    + "                       \"id\": 3,\n"
+                                    + "                       \"cityName\": \"Sydney\",\n"
+                                    + "                  },\n"
+                                    + "                  {\n"
+                                    + "                       \"id\": 4,\n"
+                                    + "                      \"cityName\": \"Melbourne\",\n"
+                                    + "                 }\n"
+                                    + "              ]\n"
                                     + "        }\n"
                                     + "    ]\n"
                                     + "}")
@@ -78,10 +103,17 @@ public class CountryController {
 
         try {
             List<CountryResponse> countryResponses = new ArrayList<>();
-            countryService.getAll().forEach(country
-                    -> countryResponses.add(CountryResponse.builder()
-                    .id(country.getId())
-                    .countryName(country.getName()).build()));
+            countryService.getAll().forEach(country ->{
+                List<CityResponse> cityResponses = new ArrayList<>();
+                cityService.getCity(country.getId()).forEach(city
+                        -> cityResponses.add(CityResponse.builder()
+                        .id(city.getId())
+                        .cityName(city.getName()).build()));
+                countryResponses.add(CountryResponse.builder()
+                        .id(country.getId())
+                        .countryName(country.getName())
+                        .city(cityResponses).build());
+            });
 
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
