@@ -63,11 +63,14 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @Operation(summary = "Login")
+    @Operation(summary = "Login (EndPoint untuk user Login \"https://febe6.up.railway.app/api/auth/signin\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Login User",
-                            description = "Data yang dibalikan setelah user melakukan Login",
+                            description = "EndPoint ini digunakan untuk user dapat melakukan login " +
+                                    "Kemudian jika user berhasil login maka akan direturn data seperti dibawah," +
+                                    "yang dimana data token dapat digunakan untuk (authorization) nanti," +
+                                    "jika bisa simpan token ke local stroge user untuk dapat digunakan disetiap endpoint)",
                             value = "{\n"
                                     + "    \"success\": true,\n"
                                     + "    \"statusCode\": 200,\n"
@@ -91,7 +94,7 @@ public class AuthController {
                                     + "    \"success\": false,\n"
                                     + "    \"statusCode\": 400,\n"
                                     + "    \"message\": \"Request Error Message\",\n"
-                                    + "    \"data\": []\n"
+                                    + "    \"data\": null\n"
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "500", content = @Content(examples = {
@@ -101,7 +104,7 @@ public class AuthController {
                                     + "    \"success\": false,\n"
                                     + "    \"statusCode\": 500,\n"
                                     + "    \"message\": \"Server Error Message\",\n"
-                                    + "    \"data\": []\n"
+                                    + "    \"data\": null\n"
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
@@ -138,11 +141,12 @@ public class AuthController {
         return ResponseEntity.ok(responseData);
     }
 
-    @Operation(summary = "Signup")
+    @Operation(summary = "Signup (EndPoint untuk user register \"https://febe6.up.railway.app/api/auth/signup\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Signup User",
-                            description = "Data yang dibalikan setelah user melakukan signup",
+                            description = "EndPoint ini digunakan untuk user melakukan signup/register akun, jika user berhasil melakukan" +
+                                    "signup maka akan dikirim kan data seperti dibawah ini",
                             value = "{\n"
                                     + "    \"success\": true,\n"
                                     + "    \"statusCode\": 200,\n"
@@ -171,7 +175,7 @@ public class AuthController {
                                     + "    \"success\": false,\n"
                                     + "    \"statusCode\": 400,\n"
                                     + "    \"message\": \"Request Error Message\",\n"
-                                    + "    \"data\": []\n"
+                                    + "    \"data\": null\n"
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "500", content = @Content(examples = {
@@ -181,7 +185,7 @@ public class AuthController {
                                     + "    \"success\": false,\n"
                                     + "    \"statusCode\": 500,\n"
                                     + "    \"message\": \"Server Error Message\",\n"
-                                    + "    \"data\": []\n"
+                                    + "    \"data\": null\n"
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })

@@ -28,11 +28,12 @@ public class CountryController {
 
     private final CountryService countryService;
 
-    @Operation(summary = "Get all country")
+    @Operation(summary = "Get all country (EndPoint digunakan untuk mendapatkan semua country \"https://febe6.up.railway.app/api/getCountry\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "List Country",
-                            description = "Menampilkan semua country yang ada dalam database",
+                            description = "Endpoint digunakan untuk mendapatkan data country seperti yang diberikan diatas," +
+                                    "kemudian data tersebut dapat digunakan untuk mengirimkan countryId ke City untuk mendapatkan city",
                             value = "{\n"
                                     + "    \"success\": true,\n"
                                     + "    \"statusCode\": 200,\n"
