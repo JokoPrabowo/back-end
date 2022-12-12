@@ -30,11 +30,12 @@ import java.util.List;
 public class TicketController {
     private final TicketService ticketService;
 
-    @Operation(summary = "Update ticket")
+    @Operation(summary = "Update ticket (EndPoint digunakan untuk update ticket \"https://febe6.up.railway.app/api/ticket/update\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Update ticket",
-                            description = "Balikan hasil dari merubah tempat duduk ticket",
+                            description = "EndPoint dapat digunakan setelah mendapatkan guestId yang didapat setelah melakukan order," +
+                                    "ini hanya untuk update seat penumpang, jika berhasil akan menampilkan data seperti diatas",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +
@@ -99,11 +100,12 @@ public class TicketController {
         }
     }
 
-    @Operation(summary = "Get ticket")
+    @Operation(summary = "Get ticket (EndPoint digunakan untuk mendapat ticket detail dari guestId \"https://febe6.up.railway.app/api/ticket/get/{guestId}\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
-                    @ExampleObject(name = "Get ticket By Id",
-                            description = "Menampilkan ticket berdasarkan guest",
+                    @ExampleObject(name = "Get ticket By guestId",
+                            description = "Menampilkan ticket berdasarkan guestId yang diapatkan setelah guest melakukan order," +
+                                    "jika berhasil akan menampilkan data seperti diatas",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +

@@ -37,11 +37,14 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
     private static final String SUCCSES = "Successfully!";
 
-    @Operation(summary = "Add Schedule")
+    @Operation(summary = "Add Schedule (EndPoint digunakan untuk membuat schedule(admin only) \"https://febe6.up.railway.app/api/add/schedule\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Create Schedule",
-                            description = "Menampilkan data setelah create schedule",
+                            description = "EndPoint ini dapat digunakan untuk membuat schedule(admin only)," +
+                                    "untuk dapat menggunkan ini bisa hit endpoint seperti categoryClassId, scheduleTimeId," +
+                                    " dan pesawatId terlebih dahulu agar schedule dapat dibuat, jika berhasil maka akan mengembalikan data" +
+                                    "seperti di atas",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +
@@ -115,11 +118,14 @@ public class ScheduleController {
         }
     }
 
-    @Operation(summary = "Paging And Sort Schedule")
+    @Operation(summary = "Paging And Sort Schedule (EndPoint digunakan untuk mendapatkan schedule berdasarkan tujuan dan sudah paging \"https://febe6.up.railway.app/api/getSchedule/{size}/{page}/{sort}\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Get Paging Schedule",
-                            description = "Menampilkan data paging schedule dari endPoint api/getSchedule/5/0/asc",
+                            description = "Endpoint ini dapat digunakan sebelum user melakukan booking order ticket, untuk mendapatkan schedule berbentuk paging " +
+                                    "berdasarkan dari mana dan kemana tujuan user mencari penerbangan, contoh paging dapat ditulis seperti ini api/getSchedule/5/0/asc," +
+                                    "kemudian scheduleId dari sini yang dipilih user akan digunakan untuk melakukan booking order ticket, jika berhasil akan" +
+                                    "mengembalikan data seperti di atas, tolong simpan scheduleId yang dipilih user untuk order ticket",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +
@@ -311,11 +317,13 @@ public class ScheduleController {
         }
     }
 
-    @Operation(summary = "All Schedule")
+    @Operation(summary = "All Schedule (EndPoint digunakan untuk mendapatkan schedule berdasarkan tujuan tanpa paging \"https://febe6.up.railway.app/api/getSchedule\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Get All Schedule",
-                            description = "Menampilkan semua data schedule yang ada",
+                            description = "EndPoint ini dapat digunakan ketika user ingin melakukan penerbangan dari mana ke tujuan apa" +
+                                    "kemudian scheduleId dari sini yang dipilih user akan digunakan untuk melakukan booking order ticket, jika berhasil akan " +
+                                    "mengembalikan data seperti di atas, tolong simpan scheduleId yang dipilih user untuk order ticket",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +

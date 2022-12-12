@@ -27,12 +27,12 @@ public class CityController {
 
     private final CityService cityService;
 
-    @Operation(summary = "Get all city")
+    @Operation(summary = "Get all city (EndPoint digunakan untuk mendapatkan semua city yang ada di Country tertentu \"https://febe6.up.railway.app/api/getCity/{countryId}\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "List City",
-                            description = "Menampilkan semua city berdasarkan country id yang ada dalam database " +
-                                    "(hasil diatas didapat dari endPoint /api/getCity/1 pada id country)",
+                            description = "Endpoint dapat digunakan setelah mendapatkan countryId, untuk mendapat city yang ada didalam country yang " +
+                                    "tersedia seperti data diatas",
                             value = "{\n"
                                     + "    \"success\": true,\n"
                                     + "    \"statusCode\": 200,\n"
@@ -41,12 +41,12 @@ public class CityController {
                                     + "        {\n"
                                     + "            \"id\": 1,\n"
                                     + "            \"cityName\": \"Jakarta\",\n"
-                                    + "            \"countryName\": \"Indonesia\"\n"
+//                                    + "            \"countryName\": \"Indonesia\"\n"
                                     + "        },\n"
                                     + "        {\n"
                                     + "            \"id\": 2,\n"
                                     + "            \"cityName\": \"Bali\",\n"
-                                    + "            \"countryName\": \"Indonesia\"\n"
+//                                    + "            \"countryName\": \"Indonesia\"\n"
                                     + "        }\n"
                                     + "    ]\n"
                                     + "}")
@@ -82,8 +82,7 @@ public class CityController {
             cityService.getCity(countryId).forEach(city
                     -> cityResponses.add(CityResponse.builder()
                     .id(city.getId())
-                    .cityName(city.getName())
-                    .countryName(city.getCountry().getName()).build()));
+                    .cityName(city.getName()).build()));
 
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
