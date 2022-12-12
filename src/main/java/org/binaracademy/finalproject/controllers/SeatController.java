@@ -28,11 +28,13 @@ public class SeatController {
 
     private final SeatService seatService;
 
-    @Operation(summary = "Get all Seat")
+    @Operation(summary = "Get all Seat (EndPoint digunakan untuk mendapatkan semua seat \"https://febe6.up.railway.app/api/getSeats\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "List Seat",
-                            description = "Menampilkan semua seat yang ada dalam database",
+                            description = "EndPoint digunakan untuk mendapatkan semua seat, dapat digunakan ketika user telah memilih" +
+                                    "schedule untuk user dapat memilih seat, jika berhasil makan akan dibalikan seperti data diatas," +
+                                    "simpan seatId untuk menggunakan nya di booking order ticket",
                             value = "{\n"
                                     + "    \"success\": true,\n"
                                     + "    \"statusCode\": 200,\n"
@@ -100,11 +102,12 @@ public class SeatController {
         }
     }
 
-    @Operation(summary = "Get all Seat Available")
+    @Operation(summary = "Get all Seat Available (EndPoint digunakan untuk mendapatkan semua seat yang masih available berdasarkan scheduleId \"https://febe6.up.railway.app/api/getSeats/{scheduleId}\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "List Seat Available",
-                            description = "Menampilkan semua seat yang masih tersedia dalam schedule yang ada dalam database",
+                            description = "EndPoint ini dapat digunakan ketika user telah memilih schedule kemudian digunakan untuk mendapatkan" +
+                                    "seat yang masih available berdasarkan scehduleId kemudian akan diberikan data seperti di atas",
                             value = "{\n"
                                     + "    \"success\": true,\n"
                                     + "    \"statusCode\": 200,\n"

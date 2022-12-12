@@ -30,11 +30,12 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @Operation(summary = "Get all notif user")
+    @Operation(summary = "Get all notif user (EndPoint digunakan untuk mendapatkan semua notification user \"https://febe6.up.railway.app/api/notificaiton/{userId}\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Get Notif user",
-                            description = "Menampilkan semua notif milik user",
+                            description = "Endpoint ini dapat digunakan ketika user ingin mengetahui notif apa aja yang dimiliki, jiak berhasil" +
+                                    "makan akan dibalikan data seperti data diatas dari notif user yang ada",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +
@@ -99,11 +100,12 @@ public class NotificationController {
         }
     }
 
-    @Operation(summary = "Get notif")
+    @Operation(summary = "Get notif (EndPoint digunakan untuk mendapatkan detail notification \"https://febe6.up.railway.app/api/getNotificaiton/{notifId}\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Get Notif By Id",
-                            description = "Menampilkan Notif berdasarkan Id",
+                            description = "Endpoint ini dapat digunakan untuk mendapatkan detail notification yang ada seperti data diatas yang diberikan," +
+                                    "mungkin dapat digunakan untuk dapat melikat order detail jika fiture nya ingin dibuat",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +

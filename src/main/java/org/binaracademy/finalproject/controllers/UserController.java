@@ -38,12 +38,13 @@ public class UserController {
 
     private final UserService userService;
 
+    @Operation(summary = "(ini test, Tidak digunakan)")
     @GetMapping("/test")
     public String test(){
         return "OK";
     }
 
-    @Operation(summary = "Add User")
+    @Operation(summary = "Add User (ini test, Tidak digunakan)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Create User",
