@@ -45,11 +45,13 @@ public class BookingController {
     @Autowired
     private ScheduleService scheduleService;
 
-    @Operation(summary = "Add guest")
+    @Operation(summary = "Add guest (EndPoint untuk user melakukan order, digunakan untuk membuat penumpang \"https://febe6.up.railway.app/api/booking/guest\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Create guest",
-                            description = "Menampilkan balikan dari create guest",
+                            description = "EndPoint ini digunakan user ketika setelah memilih schedule untuk membuat penumpang," +
+                                    "setelah berhasil melakukan hit endpoint ini maka akan dibalikan data seperti diatas," +
+                                    "tolong simpan data gusetId untuk keperluan hit endpoint order ticket nanti",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 201,\n" +
@@ -123,11 +125,13 @@ public class BookingController {
         }
     }
 
-    @Operation(summary = "Add Order")
+    @Operation(summary = "Add Order (EndPoint untuk user melakukan order, digunakan untuk membuat order ticket \"https://febe6.up.railway.app/api/booking/add\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Create Order and ticket",
-                            description = "Menampilkan balikan dari create Order",
+                            description = "EndPoint ini digunakan user untuk order ticket, ini digunakan setelah hit endpoint add guest," +
+                                    "jika berhasil makan akan dikembalikan data seperti diatas dan juga notification data yang dapat digunakan" +
+                                    "untuk in app notification",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 200,\n" +

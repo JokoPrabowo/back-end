@@ -29,11 +29,12 @@ public class AirportController {
     @Autowired
     AirportService airportService;
 
-    @Operation(summary = "Add Airport")
+    @Operation(summary = "Add Airport (EndPoint digunakan untuk membuat airpot \"https://febe6.up.railway.app/api/airport/add\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Create Airport",
-                            description = "Menampilkan balikan dari create Airport",
+                            description = "Endpoint yang dapat digunakan untuk membuat data airport, untuk dapat membuat airport harus" +
+                                    "memiliki data dari cityId, jika berhasil akan menampilkan data seperti diatas",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 201,\n" +
@@ -95,11 +96,12 @@ public class AirportController {
         }
     }
 
-    @Operation(summary = "Update Airport")
+    @Operation(summary = "Update Airport (EndPoint digunakan untuk update airpot \"https://febe6.up.railway.app/api/airport/update/{id}\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Update Airport",
-                            description = "Menampilkan balikan dari update Airport",
+                            description = "Endpoint dapat digunakan untuk update airport, untuk dapat update airpot butuh airport id," +
+                                    "jika berhasil akan menampilkan data sperti diatas",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 201,\n" +
@@ -172,11 +174,12 @@ public class AirportController {
         }
     }
 
-    @Operation(summary = "Get all Airport")
+    @Operation(summary = "Get all Airport (EndPoint digunakan untuk mdapatkan semua airpot \"https://febe6.up.railway.app/api/airport/getAirports\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "List Airport",
-                            description = "Menampilkan semua Airport yang ada dalam database",
+                            description = "Endpoint dapat digunakan untuk mendapatkan semua data dari airport yang tersedia," +
+                                    "jika berhasil akan menampilkan data seperti diatas",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 202,\n" +
@@ -250,11 +253,12 @@ public class AirportController {
         }
     }
 
-    @Operation(summary = "Get Airport By Id")
+    @Operation(summary = "Get Airport By Id (EndPoint digunakan untuk mendapat airpot detail \"https://febe6.up.railway.app/api/airport/getAirport/{id}\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Airport By Id",
-                            description = "Menampilkan Airport sesuai id dalam database",
+                            description = "Endpoint dapat digunakan untuk mendapatkan detail airport berdasarkan airportId," +
+                                    "Jika berhasil akan menampilkan data seperti diatas",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 202,\n" +
@@ -311,11 +315,11 @@ public class AirportController {
         }
     }
 
-    @Operation(summary = "Delete Airport By Id")
+    @Operation(summary = "Delete Airport By Id (EndPoint digunakan untuk menghapus airpot \"https://febe6.up.railway.app/api/airport/delete/{id}\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Delete Airport By Id",
-                            description = "Menghapus Airport sesuai id dalam database",
+                            description = "Endpoint dapat digunakan untuk mengahapus satu data airport berdasarkan airportId",
                             value = "{\n" +
                                     "    \"success\": true,\n" +
                                     "    \"statusCode\": 202,\n" +
