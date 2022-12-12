@@ -11,6 +11,5 @@ public class CityResponse {
 
     private Long id;
     private String cityName;
-    private String countryName;
 
 }
