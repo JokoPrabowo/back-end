@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,6 +71,7 @@ public class AirportController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody AirportRequest data, Errors errors){
         try {
@@ -149,6 +151,7 @@ public class AirportController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseData<Object>> update(@PathVariable("id") Long id, @Valid @RequestBody AirportRequest data, Errors errors){
         ResponseData<Object> res = new ResponseData<>();
@@ -348,6 +351,7 @@ public class AirportController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseData<Integer>> delete(@PathVariable("id") Long id){
         ResponseData<Integer> res = new ResponseData<>();

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -100,6 +101,7 @@ public class BookingController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/guest")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody GuestRequest data, Errors errors){
         ResponseData<Object> res = new ResponseData<>();
@@ -287,6 +289,7 @@ public class BookingController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
     public ResponseEntity<ResponseData<BookingResponse>> create(@Valid @RequestBody BookingOrderRequest bookingOrderRequest, Errors errors){
         ResponseData<BookingResponse> response = new ResponseData<>();

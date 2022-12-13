@@ -16,6 +16,7 @@ import org.binaracademy.finalproject.services.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,6 +75,7 @@ public class TicketController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<ResponseData<List<TicketEntity>>> update(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
         ResponseData<List<TicketEntity>> response = new ResponseData<>();
@@ -142,6 +144,7 @@ public class TicketController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/get/{guestId}")
     public ResponseEntity<ResponseData<TicketEntity>> findByGuestId(@PathVariable Long guestId){
         ResponseData<TicketEntity> response = new ResponseData<>();
