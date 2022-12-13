@@ -8,16 +8,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.binaracademy.finalproject.dto.Request.GuestRequest;
-import org.binaracademy.finalproject.dto.Request.UserLoginRequest;
 import org.binaracademy.finalproject.dto.Request.UserRegisterRequest;
-import org.binaracademy.finalproject.dto.Response.CountryResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
-import org.binaracademy.finalproject.entity.ContactGuestEntity;
-import org.binaracademy.finalproject.entity.GuestEntity;
 import org.binaracademy.finalproject.entity.UserEntity;
 import org.binaracademy.finalproject.security.jwt.JwtDecode;
-import org.binaracademy.finalproject.services.CountryService;
 import org.binaracademy.finalproject.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,9 +21,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RestController
