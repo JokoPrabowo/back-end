@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -55,5 +56,14 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-
+    @Override
+    public List<OrderEntity> FindMyOrders(String email) {
+        try{
+            log.info("order histories have been retrieved!");
+            return orderRepo.findByEmail(email);
+        }catch (Exception e){
+            log.error(ERROR_FOUND, e.getMessage());
+            return null;
+        }
+    }
 }
