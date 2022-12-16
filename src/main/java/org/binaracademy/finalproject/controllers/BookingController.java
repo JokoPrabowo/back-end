@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.binaracademy.finalproject.dto.Request.BookingOrderRequest;
 import org.binaracademy.finalproject.dto.Request.GuestRequest;
 import org.binaracademy.finalproject.dto.Request.OrderTicketRequest;
 import org.binaracademy.finalproject.dto.Response.BookingResponse;
@@ -13,11 +14,13 @@ import org.binaracademy.finalproject.dto.Response.NotificationResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.*;
 import org.binaracademy.finalproject.helper.utility.ErrorParsingUtility;
+import org.binaracademy.finalproject.security.jwt.JwtDecode;
 import org.binaracademy.finalproject.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +45,8 @@ public class BookingController {
     private NotificationService notificationService;
     @Autowired
     private ScheduleService scheduleService;
+    @Autowired
+    private JwtDecode jwtDecode;
 
     @Operation(summary = "Add guest (EndPoint untuk user melakukan order, digunakan untuk membuat penumpang \"https://febe6.up.railway.app/api/booking/guest\")")
     @ApiResponses(value = {
@@ -94,9 +99,10 @@ public class BookingController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/guest")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody GuestRequest data, Errors errors){
-        ResponseData<Object> res = new ResponseData();
+        ResponseData<Object> res = new ResponseData<>();
         try{
             if(errors.hasErrors()){
                 res.setSuccess(false);
@@ -112,7 +118,7 @@ public class BookingController {
             res.setMessage("Successfully!");
             res.setData(guestService.create(new GuestEntity(null, data.getFirstName(), data.getLastName(), data.getBirthDate(),
                     data.getNationality(), data.getCountry(), data.getPassport(), data.getEndPassport(), data.getGoogleId(),
-                    data.getUserId(), contact.getId(), null, null, null, null)));
+                    jwtDecode.decode().getUserId(), contact.getId(), null, null, null, null)));
             return ResponseEntity.ok(res);
         }catch (Exception e){
             res.setSuccess(false);
@@ -281,9 +287,16 @@ public class BookingController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
-    public ResponseEntity<ResponseData<BookingResponse>> create(@Valid @RequestBody OrderTicketRequest orderTicketRequest, Errors errors){
+    public ResponseEntity<ResponseData<BookingResponse>> create(@Valid @RequestBody BookingOrderRequest bookingOrderRequest, Errors errors){
         ResponseData<BookingResponse> response = new ResponseData<>();
+        OrderTicketRequest orderTicketRequest = OrderTicketRequest.builder()
+                                                .guestId(bookingOrderRequest.getGuestId())
+                                                .scheduleId(bookingOrderRequest.getScheduleId())
+                                                .seatId(bookingOrderRequest.getSeatId())
+                                                .userEmail(jwtDecode.decode().getEmail())
+                                                .build();
         try {
             if(errors.hasErrors()){
                 response.setData(null);

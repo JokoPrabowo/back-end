@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepo extends JpaRepository<OrderEntity, Long> {
@@ -19,4 +21,6 @@ public interface OrderRepo extends JpaRepository<OrderEntity, Long> {
     @Query(value = "SELECT price FROM schedules WHERE schedule_id = :scheduleId", nativeQuery = true)
     BigDecimal findPriceSchedule(Long scheduleId);
 
+    @Query(value = "SELECT * FROM orders WHERE email_user = :email", nativeQuery = true)
+    List<OrderEntity> findByEmail(String email);
 }

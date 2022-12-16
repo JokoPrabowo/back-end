@@ -10,11 +10,20 @@ import lombok.RequiredArgsConstructor;
 import org.binaracademy.finalproject.dto.Response.NotificationResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.NotificationEntity;
+import org.binaracademy.finalproject.security.jwt.JwtDecode;
 import org.binaracademy.finalproject.services.NotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.*;
+=======
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+>>>>>>> b34f345f1ccd9ccd698a07df3e9c5c104aaca1e7
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +36,9 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final JwtDecode jwtDecode;
 
-    @Operation(summary = "Get all notif user (EndPoint digunakan untuk mendapatkan semua notification user \"https://febe6.up.railway.app/api/notificaiton/{userId}\")")
+    @Operation(summary = "Get all notif user (EndPoint digunakan untuk mendapatkan semua notification user \"https://febe6.up.railway.app/api/notificaiton\")")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "sukses", content = @Content(examples = {
                     @ExampleObject(name = "Get Notif user",
@@ -70,20 +80,20 @@ public class NotificationController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    @GetMapping("/notification/{userId}")
-    public ResponseEntity<ResponseData<List<NotificationResponse>>> getNotification(@PathVariable("userId") Long userId){
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/notification")
+    public ResponseEntity<ResponseData<List<NotificationResponse>>> getNotification(){
         ResponseData<List<NotificationResponse>> response = new ResponseData<>();
         try {
             List<NotificationResponse> notifications = new ArrayList<>();
-            notificationService.getAllNotifByUserId(userId).forEach(s -> {
-                notifications.add(NotificationResponse.builder()
-                        .id(s.getId())
-                        .content(s.getContent())
-                        .orderId(s.getOrderId())
-                        .userId(s.getUserId())
-                        .date(s.getCreateAt())
-                        .build());
-            });
+            notificationService.getAllNotifByUserId(jwtDecode.decode().getUserId()).forEach(
+                    s -> notifications.add(NotificationResponse.builder()
+                    .id(s.getId())
+                    .content(s.getContent())
+                    .orderId(s.getOrderId())
+                    .userId(s.getUserId())
+                    .date(s.getCreateAt())
+                    .build()));
             response.setData(notifications);
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
@@ -140,6 +150,7 @@ public class NotificationController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/getNotification/{notifId}")
     public ResponseEntity<ResponseData<NotificationEntity>> getOneNotification(@PathVariable("notifId") Long notifId){
         ResponseData<NotificationEntity> response = new ResponseData<>();

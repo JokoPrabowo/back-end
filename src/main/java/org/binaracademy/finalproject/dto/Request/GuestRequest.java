@@ -27,8 +27,8 @@ public class GuestRequest {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endPassport;
     private String googleId;
-    @NotNull(message = "user id shouldn't be null")
-    private Long userId;
+//    @NotNull(message = "user id shouldn't be null")
+//    private Long userId;
     private String guestFirstname;
     private String guestLastname;
     @Pattern(regexp = "^[0-9]*$", message = "phone number is invalid")

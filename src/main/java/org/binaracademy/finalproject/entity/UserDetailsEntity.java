@@ -23,7 +23,6 @@ import java.util.Set;
 @Entity
 @Table(name = "user_details")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
 public class UserDetailsEntity implements Serializable {
 
     @Id
@@ -36,17 +35,23 @@ public class UserDetailsEntity implements Serializable {
     private String gender;
     @Column(name = "address", nullable = true)
     private String address;
-
     @Column(name = "user_id")
     private Long user_id;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
-
     @Column(name = "create_at")
     private LocalDateTime createAt;
     @Column(name = "update_at")
     private LocalDateTime updateAt;
+
+    public UserDetailsEntity(LocalDate birthDate, String gender, String address, Long user_id) {
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.address = address;
+        this.user_id = user_id;
+    }
+
+
 
 }
