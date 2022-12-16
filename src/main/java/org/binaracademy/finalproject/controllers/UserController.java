@@ -8,26 +8,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.binaracademy.finalproject.dto.Request.GuestRequest;
-import org.binaracademy.finalproject.dto.Request.UserLoginRequest;
 import org.binaracademy.finalproject.dto.Request.UserRegisterRequest;
-import org.binaracademy.finalproject.dto.Response.CountryResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
-import org.binaracademy.finalproject.entity.ContactGuestEntity;
-import org.binaracademy.finalproject.entity.GuestEntity;
 import org.binaracademy.finalproject.entity.UserEntity;
-import org.binaracademy.finalproject.services.CountryService;
+import org.binaracademy.finalproject.security.jwt.JwtDecode;
 import org.binaracademy.finalproject.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -37,6 +30,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final JwtDecode jwtDecode;
 
     @Operation(summary = "(ini test, Tidak digunakan)")
     @GetMapping("/test")
@@ -118,6 +112,18 @@ public class UserController {
             res.setData(null);
             return ResponseEntity.internalServerError().body(res);
         }
+    }
+
+    @Operation(summary = "(ini test, Tidak digunakan)")
+    @GetMapping("/test/user")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public String userAccess() {
+        log.info(jwtDecode.decode().getUserId().toString());
+        log.info(jwtDecode.decode().getUsername());
+        log.info(jwtDecode.decode().getEmail());
+        log.info(jwtDecode.decode().getToken());
+        log.info(jwtDecode.decode().getType());
+        return "User Content.";
     }
 
 

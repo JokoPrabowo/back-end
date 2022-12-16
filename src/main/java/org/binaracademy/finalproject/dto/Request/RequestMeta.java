@@ -5,18 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-import java.util.List;
-
-@Data
 @Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderTicketRequest {
+public class RequestMeta {
 
-    List<Long> guestId;
-    Long scheduleId;
-    List<Long> seatId;
-    String userEmail;
+    private Long userId;
+    private String username;
+    private String email;
+    private String token;
+    private String type;
 
 }

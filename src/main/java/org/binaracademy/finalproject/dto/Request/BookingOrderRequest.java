@@ -12,11 +12,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderTicketRequest {
+public class BookingOrderRequest {
 
+    @NotNull
     List<Long> guestId;
+    @NotNull
     Long scheduleId;
+    @NotNull
     List<Long> seatId;
-    String userEmail;
 
 }
