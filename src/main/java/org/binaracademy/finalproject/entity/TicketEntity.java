@@ -37,11 +37,9 @@ public class TicketEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "schedule_id", insertable = false, updatable = false)
     private ScheduleEntity schedule;
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "seat_id", insertable = false, updatable = false)
     private SeatEntity seat;
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "guest_id", insertable = false, updatable = false)
     private GuestEntity guest;
