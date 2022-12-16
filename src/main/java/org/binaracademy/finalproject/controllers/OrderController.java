@@ -14,12 +14,14 @@ import org.binaracademy.finalproject.dto.Response.TicketResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.OrderEntity;
 import org.binaracademy.finalproject.repositories.OrderRepo;
+import org.binaracademy.finalproject.security.jwt.JwtDecode;
 import org.binaracademy.finalproject.services.InvoiceService;
 import org.binaracademy.finalproject.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,9 +40,10 @@ import java.util.List;
 public class OrderController {
     @Autowired
     OrderService orderService;
-
     @Autowired
     InvoiceService invoiceService;
+    @Autowired
+    JwtDecode jwtDecode;
 
     @Operation(summary = "Get order histories")
     @ApiResponses(value = {
@@ -56,15 +59,57 @@ public class OrderController {
                                     + "            \"totalPrice\": 1600000,\n"
                                     + "            \"tax\": \"160000\"\n"
                                     + "            \"totalPay\": \"176000\"\n"
-                                    + "            \"scheduleId\": \"1\"\n"
+                                    + "            \"scheduleId\": {\n"
+                                        + "                 \"id\": 1,\n"
+                                    + "                     \"departureAiport\": \"Jakarta\",\n"
+                                    + "                     \"arrivalAirport\": \"Bali\",\n"
+                                    + "                     \"price\": 750000,\n"
+                                    + "                     \"maxSeat\": 1000,\n"
+                                    + "                     \"date\": \"2022-12-10\",\n"
+                                    + "                     \"scheduleTimeId\": 1,\n"
+                                    + "                     \"categoryClassId\": 1,\n"
+                                    + "                     \"pesawatId\": 1,\n"
+                                    + "                     \"scheduleTime\": {\n"
+                                    + "                             \"id\": 1,\n"
+                                    + "                             \"day\": \"sunday\"\n"
+                                    + "                             \"departureTime\": \"10:00:00\"\n"
+                                    + "                             \"arrivalTime\": \"12:00:00\"\n"
+                                    + "                         },\n"
+                                    + "                     \"categoryClass\": {\n"
+                                    + "                             \"id\": 1,\n"
+                                    + "                             \"name\": \"economy\"\n"
+                                    + "                            },\n"
+                                    + "                     \"pesawat\": {\n"
+                                    + "                             \"id\": 1,\n"
+                                    + "                             \"name\": \"Airbus A330-200\"\n"
+                                    + "                             \"airportId\": 1,\n"
+                                    + "                             \"airport\": {\n"
+                                    + "                             \"id\": 1,\n"
+                                    + "                             \"name\": \"Soekarno-Hatta International Airport\",\n"
+                                    + "                             \"cityId\": 1,\n"
+                                    + "                             \"createAt\": \"2022-12-16T23:51:15.799493\",\n"
+                                    + "                             \"updateAt\": null,\n"
+                                    + "                             \"city\": {\n"
+                                    + "                                 \"id\": 1,\n"
+                                    + "                                 \"name\": \"Jakarta\",\n"
+                                    + "                                 \"createAt\": \"2022-12-16T23:51:15.533383\",\n"
+                                    + "                                 \"updateAt\": null,\n"
+                                    + "                                 \"countryId\": 1,\n"
+                                    + "                                 \"country\": {\n"
+                                    + "                                         \"id\": 1,\n"
+                                    + "                                         \"name\": \"Indonesia\",\n"
+                                    + "                                         \"createAt\": \"2022/12/16 23:51:07\",\n"
+                                    + "                                         \"updateAt\": null\n"
+                                    + "                                     }\n"
+                                    + "                                 }\n"
+                                    + "                             },"
+                                    + "                             \"createAt\": \"2022-12-16T23:51:15.838933\",\n"
+                                    + "                             \"updateAt\": null,\n"
+                                    + "                            },\n"
+                                    + "                     \"createAt\": \"2022-12-06T09:43:35.0729626\",\n"
+                                    + "                     \"updateAt\": null\n"
+                                    + "                 },\n"
                                     + "            \"expiredAt\": \"2022-12-08\"\n"
-                                    + "        },\n"
-                                    + "        {\n"
-                                    + "            \"totalPrice\": 1200000,\n"
-                                    + "            \"tax\": \"120000\"\n"
-                                    + "            \"totalPay\": \"132000\"\n"
-                                    + "            \"scheduleId\": \"2\"\n"
-                                    + "            \"expiredAt\": \"2022-12-27\"\n"
                                     + "        }\n"
                                     + "    ]\n"
                                     + "}")
@@ -80,19 +125,21 @@ public class OrderController {
                                     + "}")
             }, mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    @GetMapping("/getHistories/{email}")
-    public ResponseEntity<ResponseData<List<HistoriesResponse>>> getHistories(@PathVariable String email) {
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/getHistories")
+    public ResponseEntity<ResponseData<List<HistoriesResponse>>> getHistories() {
 
         ResponseData<List<HistoriesResponse>> response = new ResponseData<>();
 
         try {
             List<HistoriesResponse> data = new ArrayList<>();
-            orderService.FindMyOrders(email).forEach(order ->
+            orderService.FindMyOrders(jwtDecode.decode().getEmail()).forEach(order ->
                     data.add(HistoriesResponse.builder()
                             .totalPrice(order.getTotalPrice())
                             .tax(order.getTax())
                             .totalPay(order.getTotalPay())
-                            .scheduleId(order.getScheduleId())
+                            .schedule(order.getSchedule())
+                            .ticket(order.getTicket())
                             .expiredAt(order.getExpiredAt()).build()));
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
