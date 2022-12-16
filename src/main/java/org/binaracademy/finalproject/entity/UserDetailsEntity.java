@@ -38,7 +38,7 @@ public class UserDetailsEntity implements Serializable {
     @Column(name = "user_id")
     private Long user_id;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", updatable = false)
     private UserEntity user;
     @Column(name = "create_at")
     private LocalDateTime createAt;
