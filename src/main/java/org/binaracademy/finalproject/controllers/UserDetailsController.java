@@ -17,6 +17,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -67,18 +68,22 @@ public class UserDetailsController {
     @GetMapping("/get/user/edit_profile/{user_id}")
     public ResponseEntity<ResponseData<UserDetailsEntity>> findByGuestId(@PathVariable Long user_id){
         ResponseData<UserDetailsEntity> response = new ResponseData<>();
-        try {
-            response.setData(userDetailsService.findByUserid(user_id));
+
+        UserDetailsEntity exist = userDetailsService.findByUserid(user_id);
+        if (exist != null){
+            response.setData(exist);
             response.setSuccess(true);
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage("Successfully!");
             return ResponseEntity.ok(response);
-        }catch (Exception e){
+        }
+        else{
             response.setData(null);
-            response.setSuccess(false);
+            response.setSuccess(true);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.setMessage(e.getMessage());
+            response.setMessage("No user details found");
             return ResponseEntity.internalServerError().body(response);
+
         }
     }
 
