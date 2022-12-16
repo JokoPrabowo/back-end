@@ -26,7 +26,7 @@ import javax.validation.Valid;
 public class UserDetailsController {
     private final UsersDetailsService userDetailsService;
 
-    @PostMapping("/api/user/edit_profile")
+    @PostMapping("/user/edit_profile")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody UserDetailsRequest data, Errors errors){
         try{
             ResponseData<Object> res = new ResponseData();
