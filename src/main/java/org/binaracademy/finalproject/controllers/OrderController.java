@@ -7,13 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.binaracademy.finalproject.dto.Response.HistoriesResponse;
 import org.binaracademy.finalproject.dto.Response.OrderResponse;
 import org.binaracademy.finalproject.dto.Response.TicketResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.OrderEntity;
-import org.binaracademy.finalproject.repositories.OrderRepo;
 import org.binaracademy.finalproject.security.jwt.JwtDecode;
 import org.binaracademy.finalproject.services.InvoiceService;
 import org.binaracademy.finalproject.services.OrderService;
@@ -25,12 +24,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
+@Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -42,6 +42,8 @@ public class OrderController {
     InvoiceService invoiceService;
     @Autowired
     JwtDecode jwtDecode;
+    @Autowired
+    HttpServletResponse response;
 
     @Operation(summary = "Get order histories")
     @ApiResponses(value = {
@@ -154,8 +156,7 @@ public class OrderController {
     }
 
     @GetMapping("/generateOrder/{id}")
-    public ResponseEntity<ResponseData<OrderResponse>> generateFile(HttpServletResponse response, @PathVariable Long id){
-        ResponseData<OrderResponse> data = new ResponseData<>();
+    public void generateFile(@PathVariable Long id){
         try{
             OrderEntity order = orderService.getById(id);
             List<TicketResponse> ticket = new ArrayList<>();
@@ -175,21 +176,14 @@ public class OrderController {
                     .tax(order.getTax())
                     .totalPay(order.getTotalPay())
                     .build();
-            response.addHeader("Content-Disposition", String.format("attachment; filename=\"invoiceOrder"+order.getId()+".pdf\""));
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; fileName=\"invoice"+ LocalDateTime.now().toString()+".pdf\"");
             OutputStream output = response.getOutputStream();
             invoiceService.generateOrder(sample, output);
+            log.info("succes generate invoice with orderId : {}", id);
             response.flushBuffer();
-            data.setSuccess(true);
-            data.setStatusCode(HttpStatus.ACCEPTED.value());
-            data.setMessage("Successfully");
-            data.setData(sample);
-            return ResponseEntity.accepted().body(data);
         }catch (Exception e){
-            data.setSuccess(false);
-            data.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            data.setMessage(e.getMessage());
-            data.setData(null);
-            return ResponseEntity.internalServerError().body(data);
+            log.warn("error generate invoice with message : {}", e.getMessage());
         }
     }
 }
