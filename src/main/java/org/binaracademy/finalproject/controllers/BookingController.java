@@ -308,7 +308,7 @@ public class BookingController {
                 return ResponseEntity.badRequest().body(response);
             }
             OrderEntity order = orderService.create(orderTicketRequest);
-            List<TicketEntity> ticketEntities = ticketService.create(orderTicketRequest);
+            List<TicketEntity> ticketEntities = ticketService.create(orderTicketRequest, order.getId());
             ticketEntities.forEach(ticket -> {
                 ticket.setSchedule(scheduleService.getOneSchedule(ticket.getScheduleId()));
                 ticket.setGuest(guestService.getById(ticket.getGuestId()));

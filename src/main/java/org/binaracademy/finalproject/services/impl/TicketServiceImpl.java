@@ -24,15 +24,13 @@ public class TicketServiceImpl implements TicketService {
     private static final String ERROR_FOUND = "Error found : {}";
 
     @Override
-    public List<TicketEntity> create(OrderTicketRequest orderTicketRequest) {
+    public List<TicketEntity> create(OrderTicketRequest orderTicketRequest, Long id) {
         try{
-            Long orderId = ticketRepo.findOrderIdByScheduleIdAndUsername(
-                    orderTicketRequest.getScheduleId(), orderTicketRequest.getUserEmail());
             List<TicketEntity> ticket = new ArrayList<>();
             orderTicketRequest.getSeatId().forEach(seat -> {
                 int index = orderTicketRequest.getSeatId().indexOf(seat);
                 ticket.add(ticketRepo.save(new TicketEntity(null, true, orderTicketRequest.getScheduleId(),
-                        seat, orderTicketRequest.getGuestId().get(index), orderId, null, null, null, null, LocalDateTime.now(), null)));
+                        seat, orderTicketRequest.getGuestId().get(index), id, null, null, null, null, LocalDateTime.now(), null)));
             });
             log.info("Ticket has been created : {}", orderTicketRequest.getUserEmail());
             return ticket;
