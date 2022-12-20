@@ -49,11 +49,32 @@ public class PesawatController {
 
     @Operation(summary = "Get pesawat by Airport id")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/getAllPesawat/{id}")
+    @GetMapping("/getPesawatByAirport/{id}")
     public ResponseEntity<ResponseData<List<PesawatEntity>>> getByAirportId(@PathVariable Long id){
         ResponseData<List<PesawatEntity>> response = new ResponseData<>();
         try{
             List<PesawatEntity> data = pesawatService.getByAirportId(id);
+            response.setSuccess(true);
+            response.setMessage("Successfully!");
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setData(data);
+            return ResponseEntity.ok().body(response);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.setMessage("Failed!");
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setData(null);
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    @Operation(summary = "Get pesawat by Airport id")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/getPesawatById/{id}")
+    public ResponseEntity<ResponseData<PesawatEntity>> getById(@PathVariable Long id){
+        ResponseData<PesawatEntity> response = new ResponseData<>();
+        try{
+            PesawatEntity data = pesawatService.getById(id);
             response.setSuccess(true);
             response.setMessage("Successfully!");
             response.setStatusCode(HttpStatus.OK.value());
