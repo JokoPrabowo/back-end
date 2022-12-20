@@ -9,10 +9,12 @@ import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.TicketEntity;
 import org.binaracademy.finalproject.entity.UserDetailsEntity;
 import org.binaracademy.finalproject.entity.UserEntity;
+import org.binaracademy.finalproject.security.jwt.JwtDecode;
 import org.binaracademy.finalproject.services.TicketService;
 import org.binaracademy.finalproject.services.UsersDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,7 @@ import java.util.List;
 @Tag(name = "UserDetails", description = "Operation about User Details")
 public class UserDetailsController {
     private final UsersDetailsService userDetailsService;
+    private final JwtDecode jwtDecode;
 
     @PostMapping("/user/edit_profile")
     public ResponseEntity<ResponseData<Object>> create(@Valid @RequestBody UserDetailsRequest data, Errors errors){
@@ -66,11 +69,12 @@ public class UserDetailsController {
         }
     }
 
-    @GetMapping("/get/user/edit_profile/{user_id}")
-    public ResponseEntity<ResponseData<UserDetailsEntity>> findByGuestId(@PathVariable Long user_id){
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/get/user/edit_profile")
+    public ResponseEntity<ResponseData<UserDetailsEntity>> findByGuestId(){
         ResponseData<UserDetailsEntity> response = new ResponseData<>();
 
-        UserDetailsEntity exist = userDetailsService.findByUserid(user_id);
+        UserDetailsEntity exist = userDetailsService.findByUserid(jwtDecode.decode().getUserId());
         if (exist != null){
             response.setData(exist);
             response.setSuccess(true);
