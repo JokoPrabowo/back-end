@@ -12,6 +12,7 @@ import org.binaracademy.finalproject.dto.Response.JwtResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.ERole;
 import org.binaracademy.finalproject.entity.RoleEntity;
+import org.binaracademy.finalproject.entity.UserDetailsEntity;
 import org.binaracademy.finalproject.entity.UserEntity;
 import org.binaracademy.finalproject.helper.utility.ErrorParsingUtility;
 import org.binaracademy.finalproject.helper.utility.StatusCode;
@@ -19,6 +20,7 @@ import org.binaracademy.finalproject.repositories.RoleRepo;
 import org.binaracademy.finalproject.repositories.UserRepo;
 import org.binaracademy.finalproject.security.jwt.JwtUtils;
 import org.binaracademy.finalproject.security.services.UserDetailsImpl;
+import org.binaracademy.finalproject.services.UsersDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +56,8 @@ public class AuthController {
 
     @Autowired
     UserRepo userRepository;
+    @Autowired
+    UsersDetailsService usersDetailsService;
 
     @Autowired
     RoleRepo roleRepository;
@@ -257,6 +262,14 @@ public class AuthController {
 
         user.setRoles(roles);
         userRepository.save(user);
+        usersDetailsService.create(UserDetailsEntity.builder()
+                .birthDate(null)
+                .user_id(user.getId())
+                .user(null)
+                .address(null)
+                .gender(null)
+                .createAt(LocalDateTime.now())
+                .updateAt(null).build());
         responseData.setStatusCode(StatusCode.OK);
         responseData.setSuccess(true);
         responseData.setMessage("User registered successfully!");
