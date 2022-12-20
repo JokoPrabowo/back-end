@@ -33,20 +33,20 @@ import java.util.List;
 @Tag(name = "Booking", description = "Operation about Booking")
 public class BookingController {
     @Autowired
-    private GuestService guestService;
+    GuestService guestService;
     @Autowired
-    private ContactGuestService contactGuestService;
+    ContactGuestService contactGuestService;
 
     @Autowired
-    private TicketService ticketService;
+    TicketService ticketService;
     @Autowired
-    private OrderService orderService;
+    OrderService orderService;
     @Autowired
-    private NotificationService notificationService;
+    NotificationService notificationService;
     @Autowired
-    private ScheduleService scheduleService;
+    ScheduleService scheduleService;
     @Autowired
-    private JwtDecode jwtDecode;
+    JwtDecode jwtDecode;
 
     @Operation(summary = "Add guest (EndPoint untuk user melakukan order, digunakan untuk membuat penumpang \"https://febe6.up.railway.app/api/booking/guest\")")
     @ApiResponses(value = {

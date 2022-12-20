@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.binaracademy.finalproject.dto.Response.CategoryResponse;
-import org.binaracademy.finalproject.dto.Response.HistoriesResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.services.CategoryClassService;
 import org.springframework.beans.factory.annotation.Autowired;
