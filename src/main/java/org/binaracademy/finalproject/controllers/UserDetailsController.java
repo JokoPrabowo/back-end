@@ -31,7 +31,7 @@ public class UserDetailsController {
     private final JwtDecode jwtDecode;
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("/user/edit_profile/update")
+    @PutMapping("/user/edit_profile/update")
     public ResponseEntity<ResponseData<Object>> update(@Valid @RequestBody UserDetailsRequest data, Errors errors){
         ResponseData<Object> res = new ResponseData();
         try{
