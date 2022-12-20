@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.binaracademy.finalproject.dto.Response.CityResponse;
 import org.binaracademy.finalproject.dto.Response.CountryResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
-import org.binaracademy.finalproject.entity.CityEntity;
 import org.binaracademy.finalproject.services.CityService;
 import org.binaracademy.finalproject.services.CountryService;
 import org.springframework.http.HttpStatus;

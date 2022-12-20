@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TicketService {
 
-    List<TicketEntity> create(OrderTicketRequest orderTicketRequest);
+    List<TicketEntity> create(OrderTicketRequest orderTicketRequest, Long id);
 
     List<TicketEntity> update(OrderTicketRequest orderTicketRequest);
     TicketEntity findByGuestId(Long guestId);

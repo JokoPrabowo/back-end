@@ -26,7 +26,7 @@ import java.util.Map;
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
     @Override
-    public void generateOrder(OrderResponse data, OutputStream output) {
+    public byte[] generateOrder(OrderResponse data) {
         try{
             File file = ResourceUtils.getFile("classpath:data/Order.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
@@ -42,9 +42,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             parameter.put("TOTAL_PAY", toRupiah(data.getTotalPay()));
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, new JRBeanCollectionDataSource(state));
             log.info("Order invoice has been created");
-            JasperExportManager.exportReportToPdfStream(jasperPrint, output);
+            return JasperExportManager.exportReportToPdf(jasperPrint);
         }catch(IOException | JRException e){
             log.error("Error detected {}", e);
+            return null;
         }
     }
 

@@ -5,15 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AirportResponse {
+public class PesawatResponse {
     private Long id;
-    private String airportName;
-    private String cityName;
-    private List<PesawatResponse> pesawat;
+    private String name;
 }
