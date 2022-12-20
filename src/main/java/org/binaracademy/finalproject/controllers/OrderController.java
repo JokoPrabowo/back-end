@@ -106,7 +106,7 @@ public class OrderController {
                                     + "                                         \"updateAt\": null\n"
                                     + "                                     }\n"
                                     + "                                 }\n"
-                                    + "                             },"
+                                    + "                             },\n"
                                     + "                             \"createAt\": \"2022-12-16T23:51:15.838933\",\n"
                                     + "                             \"updateAt\": null,\n"
                                     + "                            },\n"
@@ -159,6 +159,7 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/generateOrder/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
     public void generateFile(@PathVariable Long id){
         try{
