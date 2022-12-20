@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
 @Slf4j
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

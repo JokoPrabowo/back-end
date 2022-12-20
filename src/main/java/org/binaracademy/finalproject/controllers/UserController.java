@@ -24,7 +24,6 @@ import javax.validation.Valid;
 
 @CrossOrigin(origins = "*")
 @Slf4j
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
