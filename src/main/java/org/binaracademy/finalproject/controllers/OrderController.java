@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.binaracademy.finalproject.dto.Response.HistoriesResponse;
 import org.binaracademy.finalproject.dto.Response.OrderResponse;
 import org.binaracademy.finalproject.dto.Response.TicketResponse;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -157,7 +159,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/generateOrder/{id}")
+    @GetMapping(value = "/generateOrder/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
     public void generateFile(@PathVariable Long id){
         try{
             OrderEntity order = orderService.getById(id);
@@ -180,8 +182,8 @@ public class OrderController {
                     .build();
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "attachment; fileName=\"invoice"+ LocalDateTime.now().toString()+".pdf\"");
-            OutputStream output = response.getOutputStream();
-            invoiceService.generateOrder(sample, output);
+            ByteArrayInputStream invoice = new ByteArrayInputStream(invoiceService.generateOrder(sample));
+            IOUtils.copy(invoice, response.getOutputStream());
             log.info("succes generate invoice with orderId : {}", id);
             response.flushBuffer();
         }catch (Exception e){
