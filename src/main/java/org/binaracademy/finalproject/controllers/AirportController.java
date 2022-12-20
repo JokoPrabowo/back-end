@@ -8,9 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.binaracademy.finalproject.dto.Request.AirportRequest;
 import org.binaracademy.finalproject.dto.Response.AirportResponse;
+import org.binaracademy.finalproject.dto.Response.PesawatResponse;
 import org.binaracademy.finalproject.dto.ResponseData;
 import org.binaracademy.finalproject.entity.AirportEntity;
+import org.binaracademy.finalproject.entity.PesawatEntity;
 import org.binaracademy.finalproject.services.AirportService;
+import org.binaracademy.finalproject.services.PesawatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,12 +26,16 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/airport")
 @Tag(name = "Airport", description = "Operation about Airport")
 public class AirportController {
     @Autowired
     AirportService airportService;
+
+    @Autowired
+    PesawatService pesawatService;
 
     @Operation(summary = "Add Airport (EndPoint digunakan untuk membuat airpot \"https://febe6.up.railway.app/api/airport/add\")")
     @ApiResponses(value = {
@@ -237,11 +244,19 @@ public class AirportController {
         ResponseData<List<AirportResponse>> res = new ResponseData<>();
         try{
             List<AirportResponse> data = new ArrayList<>();
-            airportService.getAll().forEach(airport ->
-                    data.add(AirportResponse.builder()
+            airportService.getAll().forEach(airport ->{
+                List<PesawatResponse> pesawatResponses = new ArrayList<>();
+                List<PesawatEntity> pesawat = pesawatService.getByAirportId(airport.getId());
+                pesawat.forEach(x ->
+                        pesawatResponses.add(PesawatResponse.builder()
+                                .id(x.getId())
+                                .name(x.getName()).build()));
+                data.add(AirportResponse.builder()
                         .id(airport.getId())
                         .airportName(airport.getName())
-                        .cityName(airport.getCity().getName()).build()));
+                        .cityName(airport.getCity().getName())
+                        .pesawat(pesawatResponses).build());
+            });
             res.setSuccess(true);
             res.setStatusCode(HttpStatus.ACCEPTED.value());
             res.setMessage("Successfully!");

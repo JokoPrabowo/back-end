@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -29,5 +31,24 @@ public class PesawatServiceImpl implements PesawatService {
             log.error("Error found {}", e.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public PesawatEntity getById(Long id) {
+        Optional<PesawatEntity> data = pesawatRepo.findById(id);
+        if(data.isEmpty()){
+            return null;
+        }
+        return data.get();
+    }
+
+    @Override
+    public List<PesawatEntity> getAll() {
+        return pesawatRepo.findAll();
+    }
+
+    @Override
+    public List<PesawatEntity> getByAirportId(Long id) {
+        return pesawatRepo.findByAirportId(id);
     }
 }

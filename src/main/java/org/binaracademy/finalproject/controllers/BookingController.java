@@ -22,33 +22,31 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/booking")
 @Tag(name = "Booking", description = "Operation about Booking")
 public class BookingController {
     @Autowired
-    private GuestService guestService;
+    GuestService guestService;
     @Autowired
-    private ContactGuestService contactGuestService;
+    ContactGuestService contactGuestService;
 
     @Autowired
-    private TicketService ticketService;
+    TicketService ticketService;
     @Autowired
-    private OrderService orderService;
+    OrderService orderService;
     @Autowired
-    private NotificationService notificationService;
+    NotificationService notificationService;
     @Autowired
-    private ScheduleService scheduleService;
+    ScheduleService scheduleService;
     @Autowired
-    private JwtDecode jwtDecode;
+    JwtDecode jwtDecode;
 
     @Operation(summary = "Add guest (EndPoint untuk user melakukan order, digunakan untuk membuat penumpang \"https://febe6.up.railway.app/api/booking/guest\")")
     @ApiResponses(value = {

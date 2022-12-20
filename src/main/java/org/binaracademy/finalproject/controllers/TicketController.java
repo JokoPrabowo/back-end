@@ -9,9 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.binaracademy.finalproject.dto.Request.OrderTicketRequest;
 import org.binaracademy.finalproject.dto.ResponseData;
-import org.binaracademy.finalproject.entity.OrderEntity;
 import org.binaracademy.finalproject.entity.TicketEntity;
-import org.binaracademy.finalproject.services.OrderService;
 import org.binaracademy.finalproject.services.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/ticket")
 @RequiredArgsConstructor

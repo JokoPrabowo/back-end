@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.binaracademy.finalproject.dto.Response.HistoriesResponse;
 import org.binaracademy.finalproject.dto.Response.OrderResponse;
 import org.binaracademy.finalproject.dto.Response.TicketResponse;
@@ -21,17 +22,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -104,7 +103,7 @@ public class OrderController {
                                     + "                                         \"updateAt\": null\n"
                                     + "                                     }\n"
                                     + "                                 }\n"
-                                    + "                             },"
+                                    + "                             },\n"
                                     + "                             \"createAt\": \"2022-12-16T23:51:15.838933\",\n"
                                     + "                             \"updateAt\": null,\n"
                                     + "                            },\n"
@@ -157,7 +156,8 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/generateOrder/{id}")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping(value = "/generateOrder/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
     public void generateFile(@PathVariable Long id){
         try{
             OrderEntity order = orderService.getById(id);
@@ -180,8 +180,8 @@ public class OrderController {
                     .build();
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "attachment; fileName=\"invoice"+ LocalDateTime.now().toString()+".pdf\"");
-            OutputStream output = response.getOutputStream();
-            invoiceService.generateOrder(sample, output);
+            ByteArrayInputStream invoice = new ByteArrayInputStream(invoiceService.generateOrder(sample));
+            IOUtils.copy(invoice, response.getOutputStream());
             log.info("succes generate invoice with orderId : {}", id);
             response.flushBuffer();
         }catch (Exception e){
