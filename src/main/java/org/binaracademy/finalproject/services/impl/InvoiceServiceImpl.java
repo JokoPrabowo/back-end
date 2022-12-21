@@ -6,6 +6,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.binaracademy.finalproject.dto.Response.OrderResponse;
 import org.binaracademy.finalproject.dto.Response.TicketResponse;
 import org.binaracademy.finalproject.services.InvoiceService;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -28,8 +29,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public byte[] generateOrder(OrderResponse data) {
         try{
-            File file = ResourceUtils.getFile("classpath:data/Order.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+//            File file = ResourceUtils.getFile("classpath:data/Order.jrxml");
+//            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+            ClassPathResource classPath = new ClassPathResource("data/Order.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(classPath.getInputStream());
             List<Object> state = new ArrayList<>();
             data.getOrderDetail().forEach(x -> state.add(x));
             Map<String, Object> parameter = new HashMap<>();
