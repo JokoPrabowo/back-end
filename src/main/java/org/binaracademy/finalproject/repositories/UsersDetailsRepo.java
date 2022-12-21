@@ -10,5 +10,4 @@ public interface UsersDetailsRepo extends JpaRepository<UserDetailsEntity, Long>
 
     @Query("SELECT ud FROM UserDetailsEntity ud WHERE ud.user_id = ?1")
     Optional<UserDetailsEntity> findUserDetailsByUserId(Long user_id);
-
 }

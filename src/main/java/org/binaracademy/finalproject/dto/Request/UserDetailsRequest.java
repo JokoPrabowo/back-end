@@ -12,13 +12,10 @@ import java.time.LocalDate;
 public class UserDetailsRequest {
     @NotNull(message = "display name shouldn't be null")
     private String displayName;
-
     @NotNull(message = "birth date shouldn't be null")
     private LocalDate birthDate;
-
     @NotNull(message = "gender shouldn't be null")
     private String gender;
-
     @NotNull(message = "address shouldn't be null")
     private String address;
 }

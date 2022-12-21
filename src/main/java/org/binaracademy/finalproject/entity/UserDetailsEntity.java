@@ -47,13 +47,11 @@ public class UserDetailsEntity implements Serializable {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    public UserDetailsEntity(String displayName, LocalDate birthDate, String gender, String address) {
-        this.displayName = displayName;
+    public UserDetailsEntity(LocalDate birthDate, String gender, String address, String displayName) {
         this.birthDate = birthDate;
         this.gender = gender;
         this.address = address;
+        this.displayName = displayName;
     }
-
-
 
 }
