@@ -37,6 +37,7 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
     public UserDetailsEntity update(UserDetailsEntity userdetailsEntity, Long id) {
         try{
             UserDetailsEntity data = userDetailRepo.findById(id).get();
+            data.setDisplayName(userdetailsEntity.getDisplayName());
             data.setAddress(userdetailsEntity.getAddress());
             data.setBirthDate(userdetailsEntity.getBirthDate());
             data.setGender(userdetailsEntity.getGender());

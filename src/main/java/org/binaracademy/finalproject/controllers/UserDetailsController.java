@@ -54,10 +54,10 @@ public class UserDetailsController {
             }
             UserDetailsEntity user = userDetailsService.update(
                     new UserDetailsEntity(
+                            data.getDisplayName(),
                             data.getBirthDate(),
                             data.getGender(),
-                            data.getAddress(),
-                            data.getUser_id()), jwtDecode.decode().getUserId());
+                            data.getAddress()), jwtDecode.decode().getUserId());
             res.setSuccess(true);
             res.setStatusCode(HttpStatus.CREATED.value());
             res.setMessage("Successfully!");

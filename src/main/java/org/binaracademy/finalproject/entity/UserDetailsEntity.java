@@ -29,6 +29,8 @@ public class UserDetailsEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_details_id")
     private Long id;
+    @Column(name = "display_name", nullable = true)
+    private String displayName;
     @Column(name = "birth_date", nullable = true)
     private LocalDate birthDate;
     @Column(name = "gender", nullable = true)
@@ -45,11 +47,11 @@ public class UserDetailsEntity implements Serializable {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    public UserDetailsEntity(LocalDate birthDate, String gender, String address, Long user_id) {
+    public UserDetailsEntity(String displayName, LocalDate birthDate, String gender, String address) {
+        this.displayName = displayName;
         this.birthDate = birthDate;
         this.gender = gender;
         this.address = address;
-        this.user_id = user_id;
     }
 
 
