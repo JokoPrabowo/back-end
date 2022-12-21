@@ -10,17 +10,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDetailsRequest {
-
-    @NotNull(message = "user_id shouldn't be null")
+    @NotNull(message = "display name shouldn't be null")
+    private String displayName;
+    @NotNull(message = "birth date shouldn't be null")
     private LocalDate birthDate;
-
-    @NotNull(message = "user_id shouldn't be null")
+    @NotNull(message = "gender shouldn't be null")
     private String gender;
-
-    @NotNull(message = "user_id shouldn't be null")
+    @NotNull(message = "address shouldn't be null")
     private String address;
-
-    @NotNull(message = "user_id shouldn't be null")
-    private Long user_id;
-
 }
