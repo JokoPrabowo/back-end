@@ -156,7 +156,6 @@ public class OrderController {
         }
     }
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/generateOrder/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
     public void generateFile(@PathVariable Long id){
         try{
