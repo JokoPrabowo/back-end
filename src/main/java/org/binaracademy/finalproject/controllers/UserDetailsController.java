@@ -45,7 +45,7 @@ public class UserDetailsController {
                 });
                 return ResponseEntity.badRequest().body(res);
             }
-            Optional<UserDetailsEntity> sample = usersDetailsRepo.findByUserId(jwtDecode.decode().getUserId());
+            Optional<UserDetailsEntity> sample = usersDetailsRepo.findUserDetailsByUserId(jwtDecode.decode().getUserId());
             if (sample.isEmpty()){
                 res.setSuccess(false);
                 res.setStatusCode(HttpStatus.NOT_FOUND.value());
