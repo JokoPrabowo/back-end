@@ -29,6 +29,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public byte[] generateOrder(OrderResponse data) {
         try{
+//            File file = ResourceUtils.getFile("classpath:data/Order.jrxml");
+//            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             ClassPathResource classPath = new ClassPathResource("data/Order.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(classPath.getInputStream());
             List<Object> state = new ArrayList<>();
