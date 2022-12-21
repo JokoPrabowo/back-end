@@ -14,7 +14,8 @@
 	<name>finalproject</name>
 	<description>Spring Boot project for Binar Academy Final Project</description>
 	<properties>
-		<java.version>8</java.version>
+		<java.version>11</java.version>
+		<maven.compiler.release>11</maven.compiler.release>
 	</properties>
 	<dependencies>
 		<dependency>
