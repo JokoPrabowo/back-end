@@ -36,7 +36,7 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
     @Override
     public UserDetailsEntity update(UserDetailsEntity userdetailsEntity, Long id) {
         try{
-            UserDetailsEntity data = userDetailRepo.findById(id).get();
+            UserDetailsEntity data = userDetailRepo.findByUserId(id).get();
             data.setDisplayName(userdetailsEntity.getDisplayName());
             data.setAddress(userdetailsEntity.getAddress());
             data.setBirthDate(userdetailsEntity.getBirthDate());
